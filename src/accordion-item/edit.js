@@ -40,11 +40,26 @@ export default function Edit({ attributes, setAttributes }) {
 	const [open, setOpen] = useState(false);
 
 	return (
-		<div className="accordion-wrapper" {...useBlockProps()}>
-			<InnerBlocks
-				allowedBlocks={["custom/accordion-item"]}
-				template={[["custom/accordion-item"]]}
-			/>
+		<div className="accordion">
+			<div className="accordion-header">
+				<div className="accordion-heading">
+					<RichText
+						tagName={headingTag} // dynamic tag (h2, h3, etc.)
+						value={headingContent}
+						onChange={(value) => setAttributes({ headingContent: value })}
+						placeholder="Accordion title..."
+						allowedFormats={["core/bold", "core/italic"]}
+					/>
+				</div>
+				<div className="accordion-icon-btn">{/* custom image or icon */}</div>
+			</div>
+
+			<div className="accordion-content">
+				<InnerBlocks
+					allowedBlocks={["core/paragraph", "core/image", "core/list"]}
+					template={[["core/paragraph", { placeholder: "Add your text..." }]]}
+				/>
+			</div>
 		</div>
 	);
 }
