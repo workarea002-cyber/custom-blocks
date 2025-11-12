@@ -1,14 +1,24 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "custom-blocks/my-custom-blocks",
+	"name": "custom-blocks/accordion",
 	"version": "0.1.0",
 	"title": "Accordion",
 	"category": "widgets",
 	"icon": "smiley",
 	"description": "Example block scaffolded with Create Block tool.",
 	"example": {},
-	"attributes": {},
+	"attributes": {
+		"title": {
+			"type": "string",
+			"source": "html",
+			"selector": ".accordion-title"
+		},
+		"tag": {
+			"type": "string",
+			"default": "h3"
+		}
+	},
 	"supports": {
 		"html": false,
 		"border": {

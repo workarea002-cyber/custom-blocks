@@ -4,7 +4,12 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { useBlockProps } from '@wordpress/block-editor';
+import {
+	InnerBlocks,
+	RichText,
+	useBlockProps,
+	useInnerBlocksProps,
+} from "@wordpress/block-editor";
 
 /**
  * The save function defines the way in which the different attributes should
@@ -15,10 +20,27 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {Element} Element to render.
  */
-export default function save() {
+export default function save({ attributes }) {
+	const { title, tag } = attributes;
+
 	return (
-		<p { ...useBlockProps.save() }>
-			{ 'My Custom Blocks – hello from the saved content!' }
-		</p>
+		<div {...useBlockProps.save({ className: "accordion-wrapper" })}>
+			<div className="accordion">
+				<div className="accordion-header">
+					<div className="accordion-heading">
+						<RichText.Content
+							tagName={tag}
+							className="accordion-title"
+							value={title}
+						/>
+					</div>
+					<div className="accordion-icon-btn">{/* custom image or icon */}</div>
+				</div>
+
+				<div className="accordion-content">
+					<InnerBlocks.Content />
+				</div>
+			</div>
+		</div>
 	);
 }
