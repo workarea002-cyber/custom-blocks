@@ -1,9 +1,10 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "custom-blocks/accordion",
+	"name": "custom-blocks/accordion-item",
 	"version": "0.1.0",
-	"title": "Accordion",
+	"title": "Accordion Item",
+	"parent": ["custom-blocks/accordion"],
 	"category": "widgets",
 	"icon": "smiley",
 	"description": "Example block scaffolded with Create Block tool.",
@@ -22,46 +23,6 @@
 			"default": "h3"
 		}
 	},
-	"supports": {
-		"html": false,
-		"border": {
-			"color": true,
-			"radius": true,
-			"width": true,
-			"style": true
-		},
-		"spacing": {
-			"padding": true,
-			"margin": true,
-			"__experimentalDefaultControls": {
-				"margin": false,
-				"padding": false
-			}
-		},
-		"__experimentalBorder": {
-			"color": true,
-			"radius": true,
-			"width": true,
-			"style": true
-		},
-		"typography": {
-			"fontSize": true,
-			"lineHeight": true,
-			"__experimentalFontFamily": true,
-			"__experimentalFontStyle": true,
-			"__experimentalFontWeight": true,
-			"__experimentalLetterSpacing": true,
-			"__experimentalTextTransform": true,
-			"__experimentalTextDecoration": true,
-			"__experimentalWritingMode": true,
-			"fitText": true,
-			"__experimentalDefaultControls": {
-				"fontSize": true
-			}
-		}
-	},
 	"textdomain": "my-custom-blocks",
-	"editorScript": "file:./index.js",
-	"style": "file:./style-index.css",
-	"viewScript": "file:./view.js"
+	"editorScript": "file:./index.js"
 }

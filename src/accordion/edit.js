@@ -13,10 +13,15 @@ import { __ } from "@wordpress/i18n";
  */
 import {
 	InnerBlocks,
-	RichText,
+	InspectorControls,
+	ColorPalette,
 	useBlockProps,
-	useInnerBlocksProps,
 } from "@wordpress/block-editor";
+import {
+	PanelBody,
+	RangeControl,
+	__experimentalInputControl as InputControl,
+} from "@wordpress/components";
 import { useState } from "react";
 
 /**
@@ -35,16 +40,74 @@ import { useState } from "react";
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes }) {
-	const { headingContent, headingTag } = attributes;
+	const {
+		textColor,
+		backgroundColor,
+		paddingTop,
+		paddingRight,
+		paddingBottom,
+		paddingLeft,
+		gap,
+	} = attributes;
 
-	const [open, setOpen] = useState(false);
+	const blockProps = useBlockProps({
+		className: "accordion-wrapper",
+		style: {
+			"--accordion-padding": attributes.padding,
+			"--accordion-bg": attributes.backgroundColor,
+			"--accordion-textColor": attributes.textColor,
+			"--accordion-gap": attributes.gap,
+			"--padding-top": attributes.paddingTop,
+		},
+	});
+
+	console.log(blockProps);
 
 	return (
-		<div className="accordion-wrapper" {...useBlockProps()}>
-			<InnerBlocks
-				allowedBlocks={["custom/accordion-item"]}
-				template={[["custom/accordion-item"]]}
-			/>
-		</div>
+		<>
+			<InspectorControls>
+				<PanelBody title="Accordion Styles">
+					<p>
+						<strong>Background Color</strong>
+					</p>
+					<ColorPalette
+						title="Background Color"
+						value={backgroundColor}
+						onChange={(newColor) =>
+							setAttributes({ backgroundColor: newColor })
+						}
+					/>
+					<p>
+						<strong>Text Color</strong>
+					</p>
+					<ColorPalette
+						value={textColor}
+						onChange={(newColor) => setAttributes({ textColor: newColor })}
+					/>
+					<InputControl
+						__next40pxDefaultSize
+						label="Padding"
+						value={parseInt(paddingTop || 0)}
+						onChange={(val) => setAttributes({ paddingTop: `${val}px` })}
+						min={0}
+						max={50}
+					/>
+					<RangeControl
+						label="Gap between items"
+						value={parseInt(gap || 16)}
+						onChange={(val) => setAttributes({ gap: `${val}px` })}
+						min={0}
+						max={50}
+					/>
+				</PanelBody>
+			</InspectorControls>
+
+			<div {...blockProps}>
+				<InnerBlocks
+					allowedBlocks={["custom-blocks/accordion-item"]}
+					template={[["custom-blocks/accordion-item"]]}
+				/>
+			</div>
+		</>
 	);
 }

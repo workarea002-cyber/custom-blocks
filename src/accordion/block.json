@@ -9,17 +9,33 @@
 	"description": "Example block scaffolded with Create Block tool.",
 	"example": {},
 	"attributes": {
-		"headingTextAlign": {
-			"type": "string"
-		},
-		"headingContent": {
-			"type": "rich-text",
-			"source": "rich-text",
-			"selector": "h1,h2,h3,h4,h5,h6"
-		},
-		"headingTag": {
+		"textColor": {
 			"type": "string",
-			"default": "h3"
+			"default": ""
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": ""
+		},
+		"paddingTop": {
+			"type": "string",
+			"default": "1rem"
+		},
+		"paddingRight": {
+			"type": "string",
+			"default": "1rem"
+		},
+		"paddingBottom": {
+			"type": "string",
+			"default": "1rem"
+		},
+		"paddingLeft": {
+			"type": "string",
+			"default": "1rem"
+		},
+		"gap": {
+			"type": "string",
+			"default": "1rem"
 		}
 	},
 	"supports": {
@@ -30,12 +46,28 @@
 			"width": true,
 			"style": true
 		},
+		"color": {
+			"gradients": true,
+			"__experimentalDefaultControls": {
+				"background": true,
+				"text": true
+			}
+		},
 		"spacing": {
 			"padding": true,
 			"margin": true,
+			"blockGap": true,
 			"__experimentalDefaultControls": {
 				"margin": false,
-				"padding": false
+				"padding": false,
+				"blockGap": true
+			}
+		},
+		"__experimentalLayout": {
+			"allowSwitching": false,
+			"default": {
+				"type": "flex",
+				"orientation": "vertical"
 			}
 		},
 		"__experimentalBorder": {
@@ -44,24 +76,9 @@
 			"width": true,
 			"style": true
 		},
-		"typography": {
-			"fontSize": true,
-			"lineHeight": true,
-			"__experimentalFontFamily": true,
-			"__experimentalFontStyle": true,
-			"__experimentalFontWeight": true,
-			"__experimentalLetterSpacing": true,
-			"__experimentalTextTransform": true,
-			"__experimentalTextDecoration": true,
-			"__experimentalWritingMode": true,
-			"fitText": true,
-			"__experimentalDefaultControls": {
-				"fontSize": true
-			}
-		}
+		"allowedBlocks": true
 	},
 	"textdomain": "my-custom-blocks",
 	"editorScript": "file:./index.js",
-	"style": "file:./style-index.css",
-	"viewScript": "file:./view.js"
+	"style": "file:./style-index.css"
 }

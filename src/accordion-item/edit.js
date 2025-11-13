@@ -37,10 +37,8 @@ import { useState } from "react";
 export default function Edit({ attributes, setAttributes }) {
 	const { headingContent, headingTag } = attributes;
 
-	const [open, setOpen] = useState(false);
-
 	return (
-		<div className="accordion">
+		<div {...useBlockProps()}>
 			<div className="accordion-header">
 				<div className="accordion-heading">
 					<RichText
@@ -49,12 +47,22 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(value) => setAttributes({ headingContent: value })}
 						placeholder="Accordion title..."
 						allowedFormats={["core/bold", "core/italic"]}
+						style={{
+							color: "var(--accordion-textColor)",
+							backgroundColor: "var(--accordion-bg)",
+							paddingTop: "var(--padding-top)",
+						}}
 					/>
 				</div>
 				<div className="accordion-icon-btn">{/* custom image or icon */}</div>
 			</div>
 
-			<div className="accordion-content">
+			<div
+				className="accordion-content"
+				style={{
+					backgroundColor: "var(--accordion-bg)",
+				}}
+			>
 				<InnerBlocks
 					allowedBlocks={["core/paragraph", "core/image", "core/list"]}
 					template={[["core/paragraph", { placeholder: "Add your text..." }]]}
