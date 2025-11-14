@@ -18,7 +18,7 @@ import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
 export default function save({ attributes }) {
 	const { headingTag, headingContent } = attributes;
 	return (
-		<div className="accordion" {...useBlockProps.save()}>
+		<div {...useBlockProps.save()}>
 			<div className="accordion-header">
 				<div className="accordion-heading">
 					<RichText.Content

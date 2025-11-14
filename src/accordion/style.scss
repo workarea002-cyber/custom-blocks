@@ -4,13 +4,27 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-
-.accordion-wrapper {
-	display: flex;
-	flex-direction: column;
-	gap: var(--accordion-gap, 1rem);
+.wp-block-custom-blocks-accordion-item:not(:last-child) {
+	margin-bottom: var(--accordion-gap);
 }
-.accordion-wrapper .accordion-header {
+
+.wp-block-custom-blocks-accordion
+	.wp-block-custom-blocks-accordion-item
+	.accordion-header,
+.wp-block-custom-blocks-accordion
+	.wp-block-custom-blocks-accordion-item
+	.accordion-content {
 	background-color: var(--accordion-bg);
 	color: var(--accordion-textColor);
+	padding-top: var(--accordion-header-padding-top);
+	padding-right: var(--accordion-header-padding-right);
+	padding-bottom: var(--accordion-header-padding-bottom);
+	padding-left: var(--accordion-header-padding-left);
+}
+
+.wp-block-custom-blocks-accordion
+	.wp-block-custom-blocks-accordion-item
+	.accordion-header
+	h3 {
+	margin: 0;
 }

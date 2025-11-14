@@ -4,7 +4,7 @@
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
+import { InnerBlocks, useBlockProps } from "@wordpress/block-editor";
 
 /**
  * The save function defines the way in which the different attributes should
@@ -15,9 +15,22 @@ import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
  *
  * @return {Element} Element to render.
  */
-export default function save() {
+export default function save({ attributes }) {
+	const blockProps = useBlockProps.save({
+		style: {
+			"--accordion-bg": attributes.backgroundColor,
+			"--accordion-textColor": attributes.textColor,
+			"--accordion-gap": attributes.gap,
+			"--accordion-header-padding-top": attributes.padding.top,
+			"--accordion-header-padding-right": attributes.padding.right,
+			"--accordion-header-padding-bottom": attributes.padding.bottom,
+			"--accordion-header-padding-left": attributes.padding.left,
+			"--theme-content-spacing": attributes.contentSpacing,
+		},
+	});
+
 	return (
-		<div {...useBlockProps.save({ className: "accordion-wrapper" })}>
+		<div {...blockProps}>
 			<InnerBlocks.Content />
 		</div>
 	);

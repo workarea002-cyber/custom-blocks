@@ -11,13 +11,7 @@ import { __ } from "@wordpress/i18n";
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import {
-	InnerBlocks,
-	RichText,
-	useBlockProps,
-	useInnerBlocksProps,
-} from "@wordpress/block-editor";
-import { useState } from "react";
+import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -25,7 +19,6 @@ import { useState } from "react";
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
-
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -47,22 +40,12 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(value) => setAttributes({ headingContent: value })}
 						placeholder="Accordion title..."
 						allowedFormats={["core/bold", "core/italic"]}
-						style={{
-							color: "var(--accordion-textColor)",
-							backgroundColor: "var(--accordion-bg)",
-							paddingTop: "var(--padding-top)",
-						}}
 					/>
 				</div>
 				<div className="accordion-icon-btn">{/* custom image or icon */}</div>
 			</div>
 
-			<div
-				className="accordion-content"
-				style={{
-					backgroundColor: "var(--accordion-bg)",
-				}}
-			>
+			<div className="accordion-content">
 				<InnerBlocks
 					allowedBlocks={["core/paragraph", "core/image", "core/list"]}
 					template={[["core/paragraph", { placeholder: "Add your text..." }]]}
