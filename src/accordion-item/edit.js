@@ -11,7 +11,12 @@ import { __ } from "@wordpress/i18n";
  *
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
-import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
+import {
+	InnerBlocks,
+	RichText,
+	useBlockProps,
+	useInnerBlocksProps,
+} from "@wordpress/block-editor";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -30,26 +35,27 @@ import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
 export default function Edit({ attributes, setAttributes }) {
 	const { headingContent, headingTag } = attributes;
 
+	const innerBlockProps = useInnerBlocksProps({
+		allowedBlocks: ["core/paragraph", "core/image", "core/list"],
+		template: [["core/paragraph", { placeholder: "Add your text..." }]],
+		orientation: "vertical",
+	});
+
 	return (
 		<div {...useBlockProps()}>
 			<div className="accordion-header">
-				<div className="accordion-heading">
-					<RichText
-						tagName={headingTag} // dynamic tag (h2, h3, etc.)
-						value={headingContent}
-						onChange={(value) => setAttributes({ headingContent: value })}
-						placeholder="Accordion title..."
-						allowedFormats={["core/bold", "core/italic"]}
-					/>
-				</div>
+				<RichText
+					tagName={headingTag} // dynamic tag (h2, h3, etc.)
+					value={headingContent}
+					onChange={(value) => setAttributes({ headingContent: value })}
+					placeholder="Accordion title..."
+					allowedFormats={["core/bold", "core/italic"]}
+				/>
 				<div className="accordion-icon-btn">{/* custom image or icon */}</div>
 			</div>
 
 			<div className="accordion-content">
-				<InnerBlocks
-					allowedBlocks={["core/paragraph", "core/image", "core/list"]}
-					template={[["core/paragraph", { placeholder: "Add your text..." }]]}
-				/>
+				<div {...innerBlockProps}></div>
 			</div>
 		</div>
 	);

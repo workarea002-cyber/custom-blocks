@@ -20,17 +20,17 @@ export default function save({ attributes }) {
 	return (
 		<div {...useBlockProps.save()}>
 			<div className="accordion-header">
-				<div className="accordion-heading">
-					<RichText.Content
-						tagName={headingTag} // dynamic tag (h2, h3, etc.)
-						value={headingContent}
-					/>
-				</div>
+				<RichText.Content
+					tagName={headingTag} // dynamic tag (h2, h3, etc.)
+					value={headingContent}
+				/>
 				<div className="accordion-icon-btn">{/* custom image or icon */}</div>
 			</div>
 
 			<div className="accordion-content">
-				<InnerBlocks.Content />
+				<div>
+					<InnerBlocks.Content />
+				</div>
 			</div>
 		</div>
 	);

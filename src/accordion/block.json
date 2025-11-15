@@ -26,6 +26,15 @@
 				"left": "16px"
 			}
 		},
+		"borderRadius": {
+			"type": "object",
+			"default": {
+				"top": "",
+				"right": "",
+				"bottom": "",
+				"left": ""
+			}
+		},
 		"gap": {
 			"type": "string",
 			"default": "24px"
@@ -69,6 +78,8 @@
 		"allowedBlocks": true
 	},
 	"textdomain": "my-custom-blocks",
+	"editorStyle": "file:./index.css",
 	"editorScript": "file:./index.js",
-	"style": "file:./style-index.css"
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
 }

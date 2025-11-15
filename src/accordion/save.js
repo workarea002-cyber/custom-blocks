@@ -25,7 +25,11 @@ export default function save({ attributes }) {
 			"--accordion-header-padding-right": attributes.padding.right,
 			"--accordion-header-padding-bottom": attributes.padding.bottom,
 			"--accordion-header-padding-left": attributes.padding.left,
-			"--theme-content-spacing": attributes.contentSpacing,
+			"--accordion-content-spacing": attributes.contentSpacing,
+			"--accordion-radius-top": attributes.borderRadius.top,
+			"--accordion-radius-right": attributes.borderRadius.right,
+			"--accordion-radius-bottom": attributes.borderRadius.bottom,
+			"--accordion-radius-left": attributes.borderRadius.left,
 		},
 	});
 

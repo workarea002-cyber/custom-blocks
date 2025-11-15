@@ -29,6 +29,7 @@ import {
  *
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
+import "./editor.scss";
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -38,8 +39,14 @@ import {
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes }) {
-	const { textColor, backgroundColor, gap, padding, contentSpacing } =
-		attributes;
+	const {
+		textColor,
+		backgroundColor,
+		gap,
+		padding,
+		contentSpacing,
+		borderRadius,
+	} = attributes;
 
 	const blockProps = useBlockProps({
 		style: {
@@ -50,16 +57,18 @@ export default function Edit({ attributes, setAttributes }) {
 			"--accordion-header-padding-right": attributes.padding.right,
 			"--accordion-header-padding-bottom": attributes.padding.bottom,
 			"--accordion-header-padding-left": attributes.padding.left,
-			"--theme-content-spacing": attributes.contentSpacing,
+			"--accordion-content-spacing": attributes.contentSpacing,
+			"--accordion-radius-top": attributes.borderRadius.top,
+			"--accordion-radius-right": attributes.borderRadius.right,
+			"--accordion-radius-bottom": attributes.borderRadius.bottom,
+			"--accordion-radius-left": attributes.borderRadius.left,
 		},
 	});
-
-	console.log(attributes);
 
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title="Accordion Styles">
+				<PanelBody title="Accordion Item Styles">
 					<p>
 						<strong>Background Color</strong>
 					</p>
@@ -77,7 +86,7 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(newColor) => setAttributes({ textColor: newColor })}
 					/>
 				</PanelBody>
-				<PanelBody title="Spacing">
+				<PanelBody title="Accordion Item Spacing">
 					<BoxControl
 						__next40pxDefaultSize
 						label="Padding"
@@ -86,7 +95,7 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 					<InputControl
 						__next40pxDefaultSize
-						label="Gap between items"
+						label="Item Gap"
 						value={parseInt(gap || 24)}
 						onChange={(val) => setAttributes({ gap: `${val}px` })}
 						min={0}
@@ -94,11 +103,17 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 					<InputControl
 						__next40pxDefaultSize
-						label="Spacing between content items"
+						label="Content Spacing"
 						value={parseInt(contentSpacing || 8)}
 						onChange={(val) => setAttributes({ contentSpacing: `${val}px` })}
 						min={0}
 						max={50}
+					/>
+					<BoxControl
+						__next40pxDefaultSize
+						label="Border Radius"
+						values={borderRadius}
+						onChange={(newValues) => setAttributes({ borderRadius: newValues })}
 					/>
 				</PanelBody>
 			</InspectorControls>

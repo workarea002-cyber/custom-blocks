@@ -8,23 +8,77 @@
 	margin-bottom: var(--accordion-gap);
 }
 
-.wp-block-custom-blocks-accordion
-	.wp-block-custom-blocks-accordion-item
-	.accordion-header,
-.wp-block-custom-blocks-accordion
-	.wp-block-custom-blocks-accordion-item
-	.accordion-content {
-	background-color: var(--accordion-bg);
-	color: var(--accordion-textColor);
-	padding-top: var(--accordion-header-padding-top);
-	padding-right: var(--accordion-header-padding-right);
-	padding-bottom: var(--accordion-header-padding-bottom);
-	padding-left: var(--accordion-header-padding-left);
+.wp-block-custom-blocks-accordion-item {
+	overflow: hidden;
+	border-radius: var(--accordion-radius-left) var(--accordion-radius-left)
+		var(--accordion-radius-bottom) var(--accordion-radius-left);
 }
 
-.wp-block-custom-blocks-accordion
-	.wp-block-custom-blocks-accordion-item
-	.accordion-header
-	h3 {
-	margin: 0;
+.wp-block-custom-blocks-accordion {
+	.wp-block-custom-blocks-accordion-item {
+		.accordion-header {
+			background-color: var(--accordion-bg);
+			color: var(--accordion-textColor);
+		}
+		.accordion-content {
+			background-color: var(--accordion-bg);
+			color: var(--accordion-textColor);
+		}
+	}
+}
+
+.wp-block-custom-blocks-accordion {
+	.wp-block-custom-blocks-accordion-item {
+		.accordion-header {
+			padding: var(--accordion-header-padding-top)
+				var(--accordion-header-padding-right)
+				var(--accordion-header-padding-bottom)
+				var(--accordion-header-padding-left);
+		}
+		.accordion-content div {
+			padding: var(--accordion-header-padding-top)
+				var(--accordion-header-padding-right)
+				var(--accordion-header-padding-bottom)
+				var(--accordion-header-padding-left);
+		}
+	}
+}
+
+.wp-block-custom-blocks-accordion {
+	.wp-block-custom-blocks-accordion-item {
+		.accordion-header {
+			h3 {
+				margin: 0;
+			}
+		}
+		.accordion-content {
+			div > * {
+				margin: 0;
+			}
+		}
+	}
+}
+
+.wp-block-custom-blocks-accordion {
+	.wp-block-custom-blocks-accordion-item {
+		.accordion-content {
+			position: relative; /* safe */
+			pointer-events: auto;
+			overflow: hidden;
+			max-height: 0;
+			transition:
+				max-height 0.3s ease-in-out,
+				padding 0.25s ease-in-out;
+		}
+	}
+}
+
+.wp-block-custom-blocks-accordion {
+	.wp-block-custom-blocks-accordion-item {
+		.accordion-content {
+			div > * {
+				margin-bottom: var(--accordion-content-spacing);
+			}
+		}
+	}
 }
