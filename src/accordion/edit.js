@@ -23,6 +23,8 @@ import {
 	BoxControl,
 } from "@wordpress/components";
 
+import { Icons } from "./assets";
+
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
@@ -30,6 +32,7 @@ import {
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import "./editor.scss";
+import { useEffect } from "react";
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -46,6 +49,9 @@ export default function Edit({ attributes, setAttributes }) {
 		padding,
 		contentSpacing,
 		borderRadius,
+		allowedBlocks,
+		iconId,
+		isChevron,
 	} = attributes;
 
 	const blockProps = useBlockProps({
@@ -65,10 +71,26 @@ export default function Edit({ attributes, setAttributes }) {
 		},
 	});
 
+	useEffect(() => {
+		setAttributes({
+			iconUrl: Icons.find((item) => item.id === iconId)?.svg,
+			rotate: Icons.find((item) => item.id === iconId)?.rotate,
+		});
+	}, [iconId]);
+
+	const handleIcon = (e, id, svg, rotate) => {
+		e.stopPropagation();
+		setAttributes({
+			iconId: id,
+			iconUrl: svg,
+			rotate: rotate,
+		});
+	};
+
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title="Accordion Item Styles">
+				<PanelBody title="Accordion Item Styles" initialOpen={false}>
 					<p>
 						<strong>Background Color</strong>
 					</p>
@@ -86,7 +108,7 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(newColor) => setAttributes({ textColor: newColor })}
 					/>
 				</PanelBody>
-				<PanelBody title="Accordion Item Spacing">
+				<PanelBody title="Accordion Item Spacing" initialOpen={false}>
 					<BoxControl
 						__next40pxDefaultSize
 						label="Padding"
@@ -116,12 +138,26 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(newValues) => setAttributes({ borderRadius: newValues })}
 					/>
 				</PanelBody>
+				<PanelBody title="Accordion Icon" initialOpen={false}>
+					<div className="accordion-icon">
+						{Icons.map(({ id, svg, rotate }) => (
+							<button
+								key={id}
+								className={iconId === id && "active"}
+								onClick={(e) => handleIcon(e, id, svg, rotate)}
+							>
+								<img src={svg} alt="icon" width={35} height={35} />
+							</button>
+						))}
+					</div>
+				</PanelBody>
 			</InspectorControls>
 
 			<div {...blockProps}>
 				<InnerBlocks
-					allowedBlocks={["custom-blocks/accordion-item"]}
+					allowedBlocks={allowedBlocks}
 					template={[["custom-blocks/accordion-item"]]}
+					orientation="vertical"
 				/>
 			</div>
 		</>

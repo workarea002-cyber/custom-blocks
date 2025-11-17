@@ -16,7 +16,8 @@ import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
  * @return {Element} Element to render.
  */
 export default function save({ attributes }) {
-	const { headingTag, headingContent } = attributes;
+	const { headingTag, headingContent, iconUrl, rotate } = attributes;
+
 	return (
 		<div {...useBlockProps.save()}>
 			<div className="accordion-header">
@@ -24,7 +25,15 @@ export default function save({ attributes }) {
 					tagName={headingTag} // dynamic tag (h2, h3, etc.)
 					value={headingContent}
 				/>
-				<div className="accordion-icon-btn">{/* custom image or icon */}</div>
+				<div className="accordion-icon-btn">
+					<img
+						className={rotate && "rotate"}
+						src={iconUrl}
+						alt="icon"
+						width={24}
+						height={24}
+					/>
+				</div>
 			</div>
 
 			<div className="accordion-content">

@@ -82,3 +82,39 @@
 		}
 	}
 }
+
+.wp-block-custom-blocks-accordion {
+	.wp-block-custom-blocks-accordion-item {
+		.accordion-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+
+			.accordion-icon-btn {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				img {
+				}
+
+				img.rotate {
+					transform: rotate(180deg);
+					transition: transform 0.3s ease-in-out;
+				}
+			}
+		}
+	}
+}
+
+.wp-block-custom-blocks-accordion {
+	.wp-block-custom-blocks-accordion-item.show-text {
+		.accordion-header {
+			.accordion-icon-btn {
+				img.rotate {
+					transform: rotate(0deg);
+				}
+			}
+		}
+	}
+}

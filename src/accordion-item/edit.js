@@ -12,11 +12,12 @@ import { __ } from "@wordpress/i18n";
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import {
-	InnerBlocks,
 	RichText,
 	useBlockProps,
 	useInnerBlocksProps,
 } from "@wordpress/block-editor";
+import { Icons } from "../accordion/assets";
+import { useEffect } from "react";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -32,11 +33,22 @@ import {
  *
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, setAttributes }) {
-	const { headingContent, headingTag } = attributes;
+export default function Edit({ attributes, setAttributes, context }) {
+	const { headingContent, headingTag, allowedBlocks } = attributes;
+	const iconId = context["iconId"];
+	const iconUrl = context["iconUrl"];
+	const rotate = context["rotate"];
 
+	useEffect(() => {
+		setAttributes({
+			iconUrl: iconUrl,
+			rotate: rotate,
+		});
+	}, [iconId]);
+
+	console.log(rotate);
 	const innerBlockProps = useInnerBlocksProps({
-		allowedBlocks: ["core/paragraph", "core/image", "core/list"],
+		allowedBlocks,
 		template: [["core/paragraph", { placeholder: "Add your text..." }]],
 		orientation: "vertical",
 	});
@@ -51,7 +63,15 @@ export default function Edit({ attributes, setAttributes }) {
 					placeholder="Accordion title..."
 					allowedFormats={["core/bold", "core/italic"]}
 				/>
-				<div className="accordion-icon-btn">{/* custom image or icon */}</div>
+				<div className="accordion-icon-btn">
+					<img
+						className={rotate && "rotate"}
+						src={iconUrl}
+						alt="icon"
+						width={24}
+						height={24}
+					/>
+				</div>
 			</div>
 
 			<div className="accordion-content">

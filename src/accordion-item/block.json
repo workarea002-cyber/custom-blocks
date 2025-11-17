@@ -21,8 +21,21 @@
 		"headingTag": {
 			"type": "string",
 			"default": "h3"
+		},
+		"rotate": {
+			"type": "boolean"
+		},
+		"iconUrl": {
+			"type": "string"
 		}
 	},
+	"allowedBlocks": ["core/paragraph", "core/image", "core/list"],
+	"supports": {
+		"__experimentalSlashInserter": true,
+		"inserter": true,
+		"contentRole": true
+	},
+	"usesContext": ["iconId", "iconUrl", "rotate"],
 	"textdomain": "my-custom-blocks",
 	"editorScript": "file:./index.js"
 }
