@@ -9,3 +9,21 @@
 		}
 	}
 }
+
+.accordion-icons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+
+	button {
+		margin: 8px;
+		background-color: #ebe6e7;
+		border: none;
+		border-radius: 8px;
+		padding: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}

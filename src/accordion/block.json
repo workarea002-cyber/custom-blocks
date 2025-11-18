@@ -44,23 +44,26 @@
 			"type": "string",
 			"default": "8px"
 		},
-		"iconId": {
-			"type": "number",
-			"default": 1
+		"accordionCustomIcon": {
+			"type": "object",
+			"default": {
+				"id": 0,
+				"url": "",
+				"alt": ""
+			}
 		},
-		"iconUrl": {
-			"type": "string",
-			"default": ""
-		},
-		"rotate": {
-			"type": "boolean",
-			"default": false
+		"accordionIcon": {
+			"type": "object",
+			"default": {
+				"id": 1,
+				"url": "",
+				"alt": "icon"
+			}
 		}
 	},
 	"providesContext": {
-		"iconId": "iconId",
-		"iconUrl": "iconUrl",
-		"rotate": "rotate"
+		"accordionIcon": "accordionIcon",
+		"accordionCustomIcon": "accordionCustomIcon"
 	},
 	"supports": {
 		"html": false,

@@ -16,7 +16,7 @@ import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
  * @return {Element} Element to render.
  */
 export default function save({ attributes }) {
-	const { headingTag, headingContent, iconUrl, rotate } = attributes;
+	const { headingTag, headingContent, accordionItemIcon } = attributes;
 
 	return (
 		<div {...useBlockProps.save()}>
@@ -26,13 +26,7 @@ export default function save({ attributes }) {
 					value={headingContent}
 				/>
 				<div className="accordion-icon-btn">
-					<img
-						className={rotate && "rotate"}
-						src={iconUrl}
-						alt="icon"
-						width={24}
-						height={24}
-					/>
+					<img src={accordionItemIcon} alt="icon" width={24} height={24} />
 				</div>
 			</div>
 

@@ -16,7 +16,6 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 } from "@wordpress/block-editor";
-import { Icons } from "../accordion/assets";
 import { useEffect } from "react";
 
 /**
@@ -34,19 +33,21 @@ import { useEffect } from "react";
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes, context }) {
-	const { headingContent, headingTag, allowedBlocks } = attributes;
-	const iconId = context["iconId"];
-	const iconUrl = context["iconUrl"];
-	const rotate = context["rotate"];
+	const { headingContent, headingTag, allowedBlocks, accordionItemIcon } =
+		attributes;
+
+	const accordionIconContext = context["accordionIcon"];
+	const accordionCustomIconContext = context["accordionCustomIcon"];
 
 	useEffect(() => {
 		setAttributes({
-			iconUrl: iconUrl,
-			rotate: rotate,
+			accordionItemIcon:
+				accordionIconContext.url == ""
+					? accordionCustomIconContext.url
+					: accordionIconContext.url,
 		});
-	}, [iconId]);
+	}, [accordionIconContext.id, accordionCustomIconContext.id]);
 
-	console.log(rotate);
 	const innerBlockProps = useInnerBlocksProps({
 		allowedBlocks,
 		template: [["core/paragraph", { placeholder: "Add your text..." }]],
@@ -64,13 +65,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 					allowedFormats={["core/bold", "core/italic"]}
 				/>
 				<div className="accordion-icon-btn">
-					<img
-						className={rotate && "rotate"}
-						src={iconUrl}
-						alt="icon"
-						width={24}
-						height={24}
-					/>
+					<img src={accordionItemIcon} alt="icon" width={24} height={24} />
 				</div>
 			</div>
 

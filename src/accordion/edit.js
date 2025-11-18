@@ -16,14 +16,14 @@ import {
 	InspectorControls,
 	ColorPalette,
 	useBlockProps,
+	MediaUpload,
 } from "@wordpress/block-editor";
 import {
 	PanelBody,
 	__experimentalInputControl as InputControl,
 	BoxControl,
+	Button,
 } from "@wordpress/components";
-
-import { Icons } from "./assets";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -32,7 +32,9 @@ import { Icons } from "./assets";
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import "./editor.scss";
+import ChevronUp from "./assets/chevron-up.svg";
 import { useEffect } from "react";
+import { Icons } from "./assets";
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -50,9 +52,24 @@ export default function Edit({ attributes, setAttributes }) {
 		contentSpacing,
 		borderRadius,
 		allowedBlocks,
-		iconId,
-		isChevron,
+		accordionCustomIcon,
+		accordionIcon,
 	} = attributes;
+
+	useEffect(() => {
+		const getIcon = Icons.find((item) => item.id === accordionIcon.id);
+
+		setAttributes({
+			accordionIcon: { ...accordionIcon, url: getIcon.svg },
+		});
+	}, [accordionIcon.id]);
+
+	const handleIcon = (e, id, svg) => {
+		e.stopPropagation();
+		setAttributes({
+			accordionIcon: { id, url: svg },
+		});
+	};
 
 	const blockProps = useBlockProps({
 		style: {
@@ -70,22 +87,6 @@ export default function Edit({ attributes, setAttributes }) {
 			"--accordion-radius-left": attributes.borderRadius.left,
 		},
 	});
-
-	useEffect(() => {
-		setAttributes({
-			iconUrl: Icons.find((item) => item.id === iconId)?.svg,
-			rotate: Icons.find((item) => item.id === iconId)?.rotate,
-		});
-	}, [iconId]);
-
-	const handleIcon = (e, id, svg, rotate) => {
-		e.stopPropagation();
-		setAttributes({
-			iconId: id,
-			iconUrl: svg,
-			rotate: rotate,
-		});
-	};
 
 	return (
 		<>
@@ -108,6 +109,7 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(newColor) => setAttributes({ textColor: newColor })}
 					/>
 				</PanelBody>
+
 				<PanelBody title="Accordion Item Spacing" initialOpen={false}>
 					<BoxControl
 						__next40pxDefaultSize
@@ -138,16 +140,67 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(newValues) => setAttributes({ borderRadius: newValues })}
 					/>
 				</PanelBody>
+
 				<PanelBody title="Accordion Icon" initialOpen={false}>
-					<div className="accordion-icon">
-						{Icons.map(({ id, svg, rotate }) => (
-							<button
+					<MediaUpload
+						title="Select Image"
+						allowedTypes={[
+							"image/jpeg",
+							"image/png",
+							"image/webp",
+							"image/svg+xml",
+						]}
+						value={accordionCustomIcon.id}
+						onSelect={(newImage) =>
+							setAttributes({
+								accordionCustomIcon: {
+									id: newImage.id,
+									url: newImage.url,
+									alt: newImage.alt,
+								},
+							})
+						}
+						render={({ open }) => {
+							if (0 == accordionCustomIcon.id) {
+								return (
+									<Button
+										className="components-button is-primary"
+										onClick={open}
+									>
+										Select Image
+									</Button>
+								);
+							} else {
+								return (
+									<>
+										<img src={accordionCustomIcon.url} onClick={open} />
+										<Button
+											className="components-button is-secondary"
+											onClick={() =>
+												setAttributes({
+													accordionCustomIcon,
+												})
+											}
+										>
+											Delete Image
+										</Button>
+									</>
+								);
+							}
+						}}
+					/>
+
+					<div className="accordion-icons">
+						{Icons.map(({ id, svg }) => (
+							<Button
 								key={id}
-								className={iconId === id && "active"}
-								onClick={(e) => handleIcon(e, id, svg, rotate)}
+								className={`components-button is-${
+									accordionIcon.id === id ? "primary" : "secondary"
+								}`}
+								onClick={(e) => handleIcon(e, id, svg)}
 							>
-								<img src={svg} alt="icon" width={35} height={35} />
-							</button>
+								<img src={svg} alt="icon" width={24} height={24} />
+							</Button>
 						))}
 					</div>
 				</PanelBody>
