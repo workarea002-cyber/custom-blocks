@@ -32,9 +32,7 @@ import {
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import "./editor.scss";
-import ChevronUp from "./assets/chevron-up.svg";
-import { useEffect } from "react";
-import { Icons } from "./assets";
+import { ChevronUp, Icons } from "./assets";
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -52,22 +50,20 @@ export default function Edit({ attributes, setAttributes }) {
 		contentSpacing,
 		borderRadius,
 		allowedBlocks,
-		accordionCustomIcon,
-		accordionIcon,
+		accordionCustomIcons,
+		accordionIcons,
 	} = attributes;
 
-	useEffect(() => {
-		const getIcon = Icons.find((item) => item.id === accordionIcon.id);
-
-		setAttributes({
-			accordionIcon: { ...accordionIcon, url: getIcon.svg },
-		});
-	}, [accordionIcon.id]);
-
-	const handleIcon = (e, id, svg) => {
+	const handleOpenIcon = (e, id, svg) => {
 		e.stopPropagation();
 		setAttributes({
-			accordionIcon: { id, url: svg },
+			accordionIcons: { ...accordionIcons, openId: id, openUrl: svg },
+		});
+	};
+	const handleCloseIcon = (e, id, svg) => {
+		e.stopPropagation();
+		setAttributes({
+			accordionIcons: { ...accordionIcons, closeId: id, closeUrl: svg },
 		});
 	};
 
@@ -150,18 +146,17 @@ export default function Edit({ attributes, setAttributes }) {
 							"image/webp",
 							"image/svg+xml",
 						]}
-						value={accordionCustomIcon.id}
+						value={accordionCustomIcons.openId}
 						onSelect={(newImage) =>
 							setAttributes({
-								accordionCustomIcon: {
-									id: newImage.id,
-									url: newImage.url,
-									alt: newImage.alt,
+								accordionCustomIcons: {
+									openId: newImage.id,
+									openUrl: newImage.url,
 								},
 							})
 						}
 						render={({ open }) => {
-							if (0 == accordionCustomIcon.id) {
+							if (0 == accordionCustomIcons.openId) {
 								return (
 									<Button
 										className="components-button is-primary"
@@ -173,12 +168,68 @@ export default function Edit({ attributes, setAttributes }) {
 							} else {
 								return (
 									<>
-										<img src={accordionCustomIcon.url} onClick={open} />
+										<img src={accordionCustomIcons.openUrl} onClick={open} />
 										<Button
 											className="components-button is-secondary"
 											onClick={() =>
 												setAttributes({
-													accordionCustomIcon,
+													accordionCustomIcons: {
+														openId: 0,
+														openUrl: "",
+														closeId: 0,
+														closeUrl: "",
+													},
+												})
+											}
+										>
+											Delete Image
+										</Button>
+									</>
+								);
+							}
+						}}
+					/>
+					<MediaUpload
+						title="Select Image"
+						allowedTypes={[
+							"image/jpeg",
+							"image/png",
+							"image/webp",
+							"image/svg+xml",
+						]}
+						value={accordionCustomIcons.closeId}
+						onSelect={(newImage) =>
+							setAttributes({
+								accordionCustomIcons: {
+									closeId: newImage.id,
+									closeUrl: newImage.url,
+								},
+							})
+						}
+						render={({ open }) => {
+							if (0 == accordionCustomIcons.closeId) {
+								return (
+									<Button
+										className="components-button is-primary"
+										onClick={open}
+									>
+										Select Image
+									</Button>
+								);
+							} else {
+								return (
+									<>
+										<img src={accordionCustomIcons.closeUrl} onClick={open} />
+										<Button
+											className="components-button is-secondary"
+											onClick={() =>
+												setAttributes({
+													accordionCustomIcons: {
+														openId: 0,
+														openUrl: "",
+														closeId: 0,
+														closeUrl: "",
+													},
 												})
 											}
 										>
@@ -191,17 +242,34 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 
 					<div className="accordion-icons">
-						{Icons.map(({ id, svg }) => (
-							<Button
-								key={id}
-								className={`components-button is-${
-									accordionIcon.id === id ? "primary" : "secondary"
-								}`}
-								onClick={(e) => handleIcon(e, id, svg)}
-							>
-								<img src={svg} alt="icon" width={24} height={24} />
-							</Button>
-						))}
+						<div className="open-icon">
+							<p>Select Open Icon</p>
+							{Icons.map(({ id, svg }) => (
+								<Button
+									key={id}
+									className={`components-button is-${
+										accordionIcons.openId === id ? "primary" : "secondary"
+									}`}
+									onClick={(e) => handleOpenIcon(e, id, svg)}
+								>
+									<img src={svg} alt="icon" width={24} height={24} />
+								</Button>
+							))}
+						</div>
+						<div className="close-icon">
+							<p>Select Close Icon</p>
+							{Icons.map(({ id, svg }) => (
+								<Button
+									key={id}
+									className={`components-button is-${
+										accordionIcons.closeId === id ? "primary" : "secondary"
+									}`}
+									onClick={(e) => handleCloseIcon(e, id, svg)}
+								>
+									<img src={svg} alt="icon" width={24} height={24} />
+								</Button>
+							))}
+						</div>
 					</div>
 				</PanelBody>
 			</InspectorControls>

@@ -22,8 +22,12 @@
 			"type": "string",
 			"default": "h3"
 		},
-		"accordionItemIcon": {
-			"type": "string"
+		"iconUrl": {
+			"type": "object",
+			"default": {
+				"openUrl": "",
+				"closeUrl": ""
+			}
 		}
 	},
 	"allowedBlocks": ["core/paragraph", "core/image", "core/list"],
@@ -32,7 +36,7 @@
 		"inserter": true,
 		"contentRole": true
 	},
-	"usesContext": ["accordionIcon", "accordionCustomIcon"],
+	"usesContext": ["accordionIcons", "accordionCustomIcons"],
 	"textdomain": "my-custom-blocks",
 	"editorScript": "file:./index.js"
 }

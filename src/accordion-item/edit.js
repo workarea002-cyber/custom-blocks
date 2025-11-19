@@ -17,6 +17,7 @@ import {
 	useInnerBlocksProps,
 } from "@wordpress/block-editor";
 import { useEffect } from "react";
+import { ChevronDown, ChevronUp } from "../accordion/assets";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -33,20 +34,43 @@ import { useEffect } from "react";
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes, context }) {
-	const { headingContent, headingTag, allowedBlocks, accordionItemIcon } =
-		attributes;
+	const { headingContent, headingTag, allowedBlocks, iconUrl } = attributes;
 
-	const accordionIconContext = context["accordionIcon"];
-	const accordionCustomIconContext = context["accordionCustomIcon"];
+	const iconContext = context["accordionIcons"];
+	const customIconContext = context["accordionCustomIcons"];
 
 	useEffect(() => {
-		setAttributes({
-			accordionItemIcon:
-				accordionIconContext.url == ""
-					? accordionCustomIconContext.url
-					: accordionIconContext.url,
-		});
-	}, [accordionIconContext.id, accordionCustomIconContext.id]);
+		const getOpenIconUrl =
+			iconContext.openUrl == ""
+				? ChevronUp
+				: customIconContext.openUrl == ""
+				? iconContext.openUrl
+				: customIconContext.openUrl;
+		const getCloseIconUrl =
+			iconContext.closeUrl == ""
+				? ChevronDown
+				: customIconContext.closeUrl == ""
+				? iconContext.closeUrl
+				: customIconContext.closeUrl;
+
+		if (
+			getOpenIconUrl !== iconUrl.openUrl &&
+			getCloseIconUrl !== iconUrl.closeUrl
+		) {
+			setAttributes({
+				iconUrl: {
+					...iconUrl,
+					openUrl: getOpenIconUrl,
+					closeUrl: getCloseIconUrl,
+				},
+			});
+		}
+	}, [
+		customIconContext?.openUrl,
+		customIconContext?.closeUrl,
+		iconContext?.openUrl,
+		iconContext?.closeUrl,
+	]);
 
 	const innerBlockProps = useInnerBlocksProps({
 		allowedBlocks,
@@ -65,7 +89,20 @@ export default function Edit({ attributes, setAttributes, context }) {
 					allowedFormats={["core/bold", "core/italic"]}
 				/>
 				<div className="accordion-icon-btn">
-					<img src={accordionItemIcon} alt="icon" width={24} height={24} />
+					<img
+						className="open-icon"
+						src={iconUrl.openUrl}
+						alt="icon"
+						width={24}
+						height={24}
+					/>
+					<img
+						className="close-icon"
+						src={iconUrl.closeUrl}
+						alt="icon"
+						width={24}
+						height={24}
+					/>
 				</div>
 			</div>
 

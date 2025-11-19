@@ -7,9 +7,24 @@ import MinusSquare from "./minus-square.svg";
 import ChevronUp from "./chevron-up.svg";
 import ChevronUpCicrle from "./chevron-up-circle.svg";
 import ChevronUpSquare from "./chevron-up-square.svg";
-import ChevronDown from "./chevron-up.svg";
-import ChevronDownCicrle from "./chevron-up-circle.svg";
-import ChevronDownSquare from "./chevron-up-square.svg";
+import ChevronDown from "./chevron-down.svg";
+import ChevronDownCicrle from "./chevron-down-circle.svg";
+import ChevronDownSquare from "./chevron-down-square.svg";
+
+export {
+	Plus,
+	PlusCircle,
+	PlusSquare,
+	Minus,
+	MinusCircle,
+	MinusSquare,
+	ChevronUp,
+	ChevronUpCicrle,
+	ChevronUpSquare,
+	ChevronDown,
+	ChevronDownCicrle,
+	ChevronDownSquare,
+};
 
 export const Icons = [
 	{ id: 1, svg: ChevronUp },

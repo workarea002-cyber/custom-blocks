@@ -44,26 +44,28 @@
 			"type": "string",
 			"default": "8px"
 		},
-		"accordionCustomIcon": {
+		"accordionCustomIcons": {
 			"type": "object",
 			"default": {
-				"id": 0,
-				"url": "",
-				"alt": ""
+				"openId": 0,
+				"closeId": 0,
+				"openUrl": "",
+				"closeUrl": ""
 			}
 		},
-		"accordionIcon": {
+		"accordionIcons": {
 			"type": "object",
 			"default": {
-				"id": 1,
-				"url": "",
-				"alt": "icon"
+				"openId": 1,
+				"closeId": 4,
+				"openUrl": "",
+				"closeUrl": ""
 			}
 		}
 	},
 	"providesContext": {
-		"accordionIcon": "accordionIcon",
-		"accordionCustomIcon": "accordionCustomIcon"
+		"accordionIcons": "accordionIcons",
+		"accordionCustomIcons": "accordionCustomIcons"
 	},
 	"supports": {
 		"html": false,
