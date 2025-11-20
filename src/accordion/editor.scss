@@ -10,20 +10,60 @@
 	}
 }
 
+.media-lib-selector {
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	flex-direction: column;
+	margin-bottom: 24px;
+}
+
 .accordion-icons {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
-	flex-wrap: wrap;
+	flex-direction: column;
 
-	button {
-		margin: 8px;
-		background-color: #ebe6e7;
-		border: none;
-		border-radius: 8px;
-		padding: 8px;
+	.open-icon {
 		display: flex;
-		align-items: center;
-		justify-content: center;
+		flex-wrap: wrap;
+
+		h4 {
+			width: 100%;
+		}
+
+		button {
+			margin: 0 8px 8px 0;
+
+			span {
+				width: 24px;
+				height: 24px;
+
+				svg {
+					fill: none;
+				}
+			}
+		}
+	}
+	.close-icon {
+		display: flex;
+		flex-wrap: wrap;
+
+		h4 {
+			width: 100%;
+		}
+
+		button {
+			margin: 0 8px 8px 0;
+
+			span {
+				width: 24px;
+				height: 24px;
+
+				svg {
+					fill: none;
+				}
+			}
+		}
 	}
 }

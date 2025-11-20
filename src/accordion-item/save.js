@@ -5,7 +5,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
-import { ChevronUp } from "../accordion/assets";
+import { ChevronUp } from "../accordion/constants";
 /**
  * The save function defines the way in which the different attributes should
  * be combined into the final markup, which is then serialized by the block
@@ -16,7 +16,7 @@ import { ChevronUp } from "../accordion/assets";
  * @return {Element} Element to render.
  */
 export default function save({ attributes }) {
-	const { headingTag, headingContent, iconUrl } = attributes;
+	const { headingTag, headingContent, iconUrl, iconType } = attributes;
 
 	return (
 		<div {...useBlockProps.save()}>
@@ -26,20 +26,35 @@ export default function save({ attributes }) {
 					value={headingContent}
 				/>
 				<div className="accordion-icon-btn">
-					<img
-						className="open-icon"
-						src={iconUrl.openUrl}
-						alt="icon"
-						width={24}
-						height={24}
-					/>
-					<img
-						className="close-icon"
-						src={iconUrl.closeUrl}
-						alt="icon"
-						width={24}
-						height={24}
-					/>
+					{iconType === "default" ? (
+						<>
+							<span
+								className="open-icon"
+								dangerouslySetInnerHTML={{ __html: iconUrl.openUrl }}
+							/>
+							<span
+								className="close-icon"
+								dangerouslySetInnerHTML={{ __html: iconUrl.closeUrl }}
+							/>
+						</>
+					) : (
+						<>
+							<img
+								className="open-icon"
+								src={iconUrl.openUrl}
+								alt="icon"
+								width={24}
+								height={24}
+							/>
+							<img
+								className="close-icon"
+								src={iconUrl.closeUrl}
+								alt="icon"
+								width={24}
+								height={24}
+							/>
+						</>
+					)}
 				</div>
 			</div>
 

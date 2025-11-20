@@ -23,6 +23,7 @@ import {
 	__experimentalInputControl as InputControl,
 	BoxControl,
 	Button,
+	RadioControl,
 } from "@wordpress/components";
 
 /**
@@ -32,7 +33,7 @@ import {
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import "./editor.scss";
-import { ChevronUp, Icons } from "./assets";
+import { Icons } from "./constants";
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -52,6 +53,7 @@ export default function Edit({ attributes, setAttributes }) {
 		allowedBlocks,
 		accordionCustomIcons,
 		accordionIcons,
+		iconType,
 	} = attributes;
 
 	const handleOpenIcon = (e, id, svg) => {
@@ -138,139 +140,190 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody title="Accordion Icon" initialOpen={false}>
-					<MediaUpload
-						title="Select Image"
-						allowedTypes={[
-							"image/jpeg",
-							"image/png",
-							"image/webp",
-							"image/svg+xml",
+					<RadioControl
+						label="Icon Type"
+						selected={iconType}
+						onChange={(value) => setAttributes({ iconType: value })}
+						options={[
+							{ label: "Custom Icons", value: "custom" },
+							{ label: "Default Icons", value: "default" },
 						]}
-						value={accordionCustomIcons.openId}
-						onSelect={(newImage) =>
-							setAttributes({
-								accordionCustomIcons: {
-									openId: newImage.id,
-									openUrl: newImage.url,
-								},
-							})
-						}
-						render={({ open }) => {
-							if (0 == accordionCustomIcons.openId) {
-								return (
-									<Button
-										className="components-button is-primary"
-										onClick={open}
-									>
-										Select Image
-									</Button>
-								);
-							} else {
-								return (
-									<>
-										<img src={accordionCustomIcons.openUrl} onClick={open} />
-										<Button
-											className="components-button is-secondary"
-											onClick={() =>
-												setAttributes({
-													accordionCustomIcons: {
-														openId: 0,
-														openUrl: "",
-														closeId: 0,
-														closeUrl: "",
-													},
-												})
-											}
-										>
-											Delete Image
-										</Button>
-									</>
-								);
-							}
-						}}
 					/>
-					<MediaUpload
-						title="Select Image"
-						allowedTypes={[
-							"image/jpeg",
-							"image/png",
-							"image/webp",
-							"image/svg+xml",
-						]}
-						value={accordionCustomIcons.closeId}
-						onSelect={(newImage) =>
-							setAttributes({
-								accordionCustomIcons: {
-									closeId: newImage.id,
-									closeUrl: newImage.url,
-								},
-							})
-						}
-						render={({ open }) => {
-							if (0 == accordionCustomIcons.closeId) {
-								return (
+					{iconType === "custom" ? (
+						<div className="media-lib-selector">
+							<h3>Custom Icons</h3>
+							<div className="select-open-icon">
+								<h4>Accordion Open</h4>
+								<MediaUpload
+									title="Select Image"
+									allowedTypes={[
+										"image/jpeg",
+										"image/png",
+										"image/webp",
+										"image/svg+xml",
+									]}
+									value={accordionCustomIcons.openId}
+									onSelect={(newImage) =>
+										setAttributes({
+											accordionCustomIcons: {
+												...accordionCustomIcons,
+												openId: newImage.id,
+												openUrl: newImage.url,
+											},
+											accordionIcons: {
+												...accordionIcons,
+												openUrl: "",
+											},
+											iconType: "custom",
+										})
+									}
+									render={({ open }) => {
+										if (0 == accordionCustomIcons.openId) {
+											return (
+												<Button
+													className="components-button is-primary"
+													onClick={open}
+												>
+													Select
+												</Button>
+											);
+										} else {
+											return (
+												<div>
+													<img
+														src={accordionCustomIcons.openUrl}
+														style={{
+															aspectRatio: "16/9",
+															objectFit: "contain",
+														}}
+														onClick={open}
+													/>
+													<Button
+														className="components-button is-secondary"
+														onClick={() =>
+															setAttributes({
+																accordionCustomIcons: {
+																	...accordionCustomIcons,
+																	openId: 0,
+																	openUrl: "",
+																},
+															})
+														}
+													>
+														Delete
+													</Button>
+												</div>
+											);
+										}
+									}}
+								/>
+							</div>
+							<div className="select-close-icon">
+								<h4>Accordion Close</h4>
+								<MediaUpload
+									title="Select Image"
+									allowedTypes={[
+										"image/jpeg",
+										"image/png",
+										"image/webp",
+										"image/svg+xml",
+									]}
+									value={accordionCustomIcons.closeId}
+									onSelect={(newImage) =>
+										setAttributes({
+											accordionCustomIcons: {
+												...accordionCustomIcons,
+												closeId: newImage.id,
+												closeUrl: newImage.url,
+											},
+											accordionIcons: {
+												...accordionIcons,
+												closeUrl: "",
+											},
+											iconType: "custom",
+										})
+									}
+									render={({ open }) => {
+										if (0 == accordionCustomIcons.closeId) {
+											return (
+												<Button
+													className="components-button is-primary"
+													onClick={open}
+												>
+													Select
+												</Button>
+											);
+										} else {
+											return (
+												<div>
+													<img
+														style={{
+															aspectRatio: "16/9",
+															objectFit: "contain",
+														}}
+														src={accordionCustomIcons.closeUrl}
+														onClick={open}
+													/>
+													<Button
+														className="components-button is-secondary"
+														onClick={() =>
+															setAttributes({
+																accordionCustomIcons: {
+																	...accordionCustomIcons,
+																	closeId: 0,
+																	closeUrl: "",
+																},
+															})
+														}
+													>
+														Delete
+													</Button>
+												</div>
+											);
+										}
+									}}
+								/>
+							</div>
+						</div>
+					) : (
+						<div className="accordion-icons">
+							<h3>Default Icons</h3>
+							<div className="open-icon">
+								<h4>Accordion Open</h4>
+								{Icons.map(({ id, svg }) => (
 									<Button
-										className="components-button is-primary"
-										onClick={open}
+										key={id}
+										className={`components-button is-${
+											accordionIcons.openId === id &&
+											accordionIcons.openUrl !== ""
+												? "primary"
+												: "secondary"
+										}`}
+										onClick={(e) => handleOpenIcon(e, id, svg)}
 									>
-										Select Image
+										<span dangerouslySetInnerHTML={{ __html: svg }} />
 									</Button>
-								);
-							} else {
-								return (
-									<>
-										<img src={accordionCustomIcons.closeUrl} onClick={open} />
-										<Button
-											className="components-button is-secondary"
-											onClick={() =>
-												setAttributes({
-													accordionCustomIcons: {
-														openId: 0,
-														openUrl: "",
-														closeId: 0,
-														closeUrl: "",
-													},
-												})
-											}
-										>
-											Delete Image
-										</Button>
-									</>
-								);
-							}
-						}}
-					/>
-
-					<div className="accordion-icons">
-						<div className="open-icon">
-							<p>Select Open Icon</p>
-							{Icons.map(({ id, svg }) => (
-								<Button
-									key={id}
-									className={`components-button is-${
-										accordionIcons.openId === id ? "primary" : "secondary"
-									}`}
-									onClick={(e) => handleOpenIcon(e, id, svg)}
-								>
-									<img src={svg} alt="icon" width={24} height={24} />
-								</Button>
-							))}
+								))}
+							</div>
+							<div className="close-icon">
+								<h4>Accordion Close</h4>
+								{Icons.map(({ id, svg }) => (
+									<Button
+										key={id}
+										className={`components-button is-${
+											accordionIcons.closeId === id &&
+											accordionIcons.closeUrl !== ""
+												? "primary"
+												: "secondary"
+										}`}
+										onClick={(e) => handleCloseIcon(e, id, svg)}
+									>
+										<span dangerouslySetInnerHTML={{ __html: svg }} />
+									</Button>
+								))}
+							</div>
 						</div>
-						<div className="close-icon">
-							<p>Select Close Icon</p>
-							{Icons.map(({ id, svg }) => (
-								<Button
-									key={id}
-									className={`components-button is-${
-										accordionIcons.closeId === id ? "primary" : "secondary"
-									}`}
-									onClick={(e) => handleCloseIcon(e, id, svg)}
-								>
-									<img src={svg} alt="icon" width={24} height={24} />
-								</Button>
-							))}
-						</div>
-					</div>
+					)}
 				</PanelBody>
 			</InspectorControls>
 

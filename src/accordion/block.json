@@ -61,11 +61,16 @@
 				"openUrl": "",
 				"closeUrl": ""
 			}
+		},
+		"iconType": {
+			"type": "string",
+			"default": "default"
 		}
 	},
 	"providesContext": {
 		"accordionIcons": "accordionIcons",
-		"accordionCustomIcons": "accordionCustomIcons"
+		"accordionCustomIcons": "accordionCustomIcons",
+		"iconType": "iconType"
 	},
 	"supports": {
 		"html": false,

@@ -28,6 +28,9 @@
 				"openUrl": "",
 				"closeUrl": ""
 			}
+		},
+		"iconType": {
+			"type": "string"
 		}
 	},
 	"allowedBlocks": ["core/paragraph", "core/image", "core/list"],
@@ -36,7 +39,7 @@
 		"inserter": true,
 		"contentRole": true
 	},
-	"usesContext": ["accordionIcons", "accordionCustomIcons"],
+	"usesContext": ["accordionIcons", "accordionCustomIcons", "iconType"],
 	"textdomain": "my-custom-blocks",
 	"editorScript": "file:./index.js"
 }

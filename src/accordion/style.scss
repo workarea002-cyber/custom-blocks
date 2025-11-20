@@ -95,9 +95,30 @@
 				align-items: center;
 				justify-content: center;
 
-				img {
+				img,
+				span {
 					width: 24px;
 					height: 24px;
+				}
+
+				.open-icon {
+					display: block;
+				}
+				.close-icon {
+					display: none;
+				}
+			}
+		}
+	}
+
+	.wp-block-custom-blocks-accordion-item.show-text {
+		.accordion-header {
+			.accordion-icon-btn {
+				.open-icon {
+					display: none;
+				}
+				.close-icon {
+					display: block;
 				}
 			}
 		}

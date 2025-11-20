@@ -17,7 +17,7 @@ import {
 	useInnerBlocksProps,
 } from "@wordpress/block-editor";
 import { useEffect } from "react";
-import { ChevronDown, ChevronUp } from "../accordion/assets";
+import { Icons } from "../accordion/constants";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -34,24 +34,27 @@ import { ChevronDown, ChevronUp } from "../accordion/assets";
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes, context }) {
-	const { headingContent, headingTag, allowedBlocks, iconUrl } = attributes;
+	const { headingContent, headingTag, allowedBlocks, iconUrl, iconType } =
+		attributes;
 
 	const iconContext = context["accordionIcons"];
 	const customIconContext = context["accordionCustomIcons"];
+	const iconContextType = context["iconType"];
 
 	useEffect(() => {
 		const getOpenIconUrl =
 			iconContext.openUrl == ""
-				? ChevronUp
+				? customIconContext.openUrl
 				: customIconContext.openUrl == ""
 				? iconContext.openUrl
-				: customIconContext.openUrl;
+				: Icons.find((item) => item.id == iconContext.openId).svg;
+
 		const getCloseIconUrl =
 			iconContext.closeUrl == ""
-				? ChevronDown
+				? customIconContext.closeUrl
 				: customIconContext.closeUrl == ""
 				? iconContext.closeUrl
-				: customIconContext.closeUrl;
+				: Icons.find((item) => item.id == iconContext.closeId).svg;
 
 		if (
 			getOpenIconUrl !== iconUrl.openUrl &&
@@ -63,6 +66,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 					openUrl: getOpenIconUrl,
 					closeUrl: getCloseIconUrl,
 				},
+				iconType: iconContextType,
 			});
 		}
 	}, [
@@ -70,6 +74,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 		customIconContext?.closeUrl,
 		iconContext?.openUrl,
 		iconContext?.closeUrl,
+		iconContextType,
 	]);
 
 	const innerBlockProps = useInnerBlocksProps({
@@ -89,20 +94,35 @@ export default function Edit({ attributes, setAttributes, context }) {
 					allowedFormats={["core/bold", "core/italic"]}
 				/>
 				<div className="accordion-icon-btn">
-					<img
-						className="open-icon"
-						src={iconUrl.openUrl}
-						alt="icon"
-						width={24}
-						height={24}
-					/>
-					<img
-						className="close-icon"
-						src={iconUrl.closeUrl}
-						alt="icon"
-						width={24}
-						height={24}
-					/>
+					{iconType === "default" ? (
+						<>
+							<span
+								className="open-icon"
+								dangerouslySetInnerHTML={{ __html: iconUrl.openUrl }}
+							/>
+							<span
+								className="close-icon"
+								dangerouslySetInnerHTML={{ __html: iconUrl.closeUrl }}
+							/>
+						</>
+					) : (
+						<>
+							<img
+								className="open-icon"
+								src={iconUrl.openUrl}
+								alt="icon"
+								width={24}
+								height={24}
+							/>
+							<img
+								className="close-icon"
+								src={iconUrl.closeUrl}
+								alt="icon"
+								width={24}
+								height={24}
+							/>
+						</>
+					)}
 				</div>
 			</div>
 
