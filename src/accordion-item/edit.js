@@ -34,51 +34,60 @@ import { Icons } from "../accordion/constants";
  * @return {Element} Element to render.
  */
 export default function Edit({ attributes, setAttributes, context }) {
-	const { headingContent, headingTag, allowedBlocks, iconUrl, iconType } =
+	const { headingContent, headTag, allowedBlocks, accordionIcon, iconType } =
 		attributes;
 
-	const iconContext = context["accordionIcons"];
-	const customIconContext = context["accordionCustomIcons"];
-	const iconContextType = context["iconType"];
+	const defaultIconContext = context["defaultAccordionIcons"];
+	const customIconContext = context["customAccordionIcons"];
+	const iconTypeContext = context["iconType"];
+	const headingTagContext = context["headingTag"];
 
 	useEffect(() => {
-		const getOpenIconUrl =
-			iconContext.openUrl == ""
-				? customIconContext.openUrl
-				: customIconContext.openUrl == ""
-				? iconContext.openUrl
-				: Icons.find((item) => item.id == iconContext.openId).svg;
+		let openUrl, closeUrl;
 
-		const getCloseIconUrl =
-			iconContext.closeUrl == ""
-				? customIconContext.closeUrl
-				: customIconContext.closeUrl == ""
-				? iconContext.closeUrl
-				: Icons.find((item) => item.id == iconContext.closeId).svg;
+		if (headTag !== headingTagContext) {
+			setAttributes({ headTag: headingTagContext });
+		}
+
+		if (iconType !== iconTypeContext) {
+			setAttributes({ iconType: iconTypeContext });
+		}
+
+		if (iconType == "custom") {
+			openUrl = customIconContext.openUrl;
+			closeUrl = customIconContext.closeUrl;
+		} else {
+			const openId = defaultIconContext.openId;
+			const closeId = defaultIconContext.closeId;
+
+			openUrl = Icons.find((i) => i.id === openId)?.svg;
+			closeUrl = Icons.find((i) => i.id === closeId)?.svg;
+		}
 
 		if (
-			getOpenIconUrl !== iconUrl.openUrl &&
-			getCloseIconUrl !== iconUrl.closeUrl
+			accordionIcon.openUrl !== openUrl ||
+			accordionIcon.closeUrl !== closeUrl
 		) {
 			setAttributes({
-				iconUrl: {
-					...iconUrl,
-					openUrl: getOpenIconUrl,
-					closeUrl: getCloseIconUrl,
+				accordionIcon: {
+					...accordionIcon,
+					openUrl,
+					closeUrl,
 				},
-				iconType: iconContextType,
 			});
 		}
 	}, [
-		customIconContext?.openUrl,
-		customIconContext?.closeUrl,
-		iconContext?.openUrl,
-		iconContext?.closeUrl,
-		iconContextType,
+		iconTypeContext,
+		headingTagContext,
+		defaultIconContext.openId,
+		defaultIconContext.closeId,
+		customIconContext.openUrl,
+		customIconContext.closeUrl,
 	]);
 
 	const innerBlockProps = useInnerBlocksProps({
 		allowedBlocks,
+		className: "inner-wrapper",
 		template: [["core/paragraph", { placeholder: "Add your text..." }]],
 		orientation: "vertical",
 	});
@@ -87,8 +96,9 @@ export default function Edit({ attributes, setAttributes, context }) {
 		<div {...useBlockProps()}>
 			<div className="accordion-header">
 				<RichText
-					tagName={headingTag} // dynamic tag (h2, h3, etc.)
+					tagName={headTag}
 					value={headingContent}
+					className="heading"
 					onChange={(value) => setAttributes({ headingContent: value })}
 					placeholder="Accordion title..."
 					allowedFormats={["core/bold", "core/italic"]}
@@ -98,25 +108,25 @@ export default function Edit({ attributes, setAttributes, context }) {
 						<>
 							<span
 								className="open-icon"
-								dangerouslySetInnerHTML={{ __html: iconUrl.openUrl }}
+								dangerouslySetInnerHTML={{ __html: accordionIcon.openUrl }}
 							/>
 							<span
 								className="close-icon"
-								dangerouslySetInnerHTML={{ __html: iconUrl.closeUrl }}
+								dangerouslySetInnerHTML={{ __html: accordionIcon.closeUrl }}
 							/>
 						</>
 					) : (
 						<>
 							<img
 								className="open-icon"
-								src={iconUrl.openUrl}
+								src={accordionIcon.openUrl}
 								alt="icon"
 								width={24}
 								height={24}
 							/>
 							<img
 								className="close-icon"
-								src={iconUrl.closeUrl}
+								src={accordionIcon.closeUrl}
 								alt="icon"
 								width={24}
 								height={24}

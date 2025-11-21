@@ -24,6 +24,7 @@ import {
 	BoxControl,
 	Button,
 	RadioControl,
+	SelectControl,
 } from "@wordpress/components";
 
 /**
@@ -51,23 +52,11 @@ export default function Edit({ attributes, setAttributes }) {
 		contentSpacing,
 		borderRadius,
 		allowedBlocks,
-		accordionCustomIcons,
-		accordionIcons,
+		customAccordionIcons,
+		defaultAccordionIcons,
 		iconType,
+		headingTag,
 	} = attributes;
-
-	const handleOpenIcon = (e, id, svg) => {
-		e.stopPropagation();
-		setAttributes({
-			accordionIcons: { ...accordionIcons, openId: id, openUrl: svg },
-		});
-	};
-	const handleCloseIcon = (e, id, svg) => {
-		e.stopPropagation();
-		setAttributes({
-			accordionIcons: { ...accordionIcons, closeId: id, closeUrl: svg },
-		});
-	};
 
 	const blockProps = useBlockProps({
 		style: {
@@ -89,7 +78,25 @@ export default function Edit({ attributes, setAttributes }) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title="Accordion Item Styles" initialOpen={false}>
+				<PanelBody title="Accordion header Tag" initialOpen={true}>
+					<SelectControl
+						label="Tag Level"
+						value={headingTag}
+						options={[
+							{ label: "h1", value: "h1" },
+							{ label: "h2", value: "h2" },
+							{ label: "h3", value: "h3" },
+							{ label: "h4", value: "h4" },
+							{ label: "h5", value: "h5" },
+							{ label: "h6", value: "h6" },
+						]}
+						onChange={(newTag) => setAttributes({ headingTag: newTag })}
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+					/>
+				</PanelBody>
+
+				<PanelBody title="Accordion Item Color" initialOpen={false}>
 					<p>
 						<strong>Background Color</strong>
 					</p>
@@ -162,23 +169,18 @@ export default function Edit({ attributes, setAttributes }) {
 										"image/webp",
 										"image/svg+xml",
 									]}
-									value={accordionCustomIcons.openId}
+									value={customAccordionIcons.openId}
 									onSelect={(newImage) =>
 										setAttributes({
-											accordionCustomIcons: {
-												...accordionCustomIcons,
+											customAccordionIcons: {
+												...customAccordionIcons,
 												openId: newImage.id,
 												openUrl: newImage.url,
 											},
-											accordionIcons: {
-												...accordionIcons,
-												openUrl: "",
-											},
-											iconType: "custom",
 										})
 									}
 									render={({ open }) => {
-										if (0 == accordionCustomIcons.openId) {
+										if (0 == customAccordionIcons.openId) {
 											return (
 												<Button
 													className="components-button is-primary"
@@ -191,7 +193,7 @@ export default function Edit({ attributes, setAttributes }) {
 											return (
 												<div>
 													<img
-														src={accordionCustomIcons.openUrl}
+														src={customAccordionIcons.openUrl}
 														style={{
 															aspectRatio: "16/9",
 															objectFit: "contain",
@@ -202,8 +204,8 @@ export default function Edit({ attributes, setAttributes }) {
 														className="components-button is-secondary"
 														onClick={() =>
 															setAttributes({
-																accordionCustomIcons: {
-																	...accordionCustomIcons,
+																customAccordionIcons: {
+																	...customAccordionIcons,
 																	openId: 0,
 																	openUrl: "",
 																},
@@ -228,23 +230,18 @@ export default function Edit({ attributes, setAttributes }) {
 										"image/webp",
 										"image/svg+xml",
 									]}
-									value={accordionCustomIcons.closeId}
+									value={customAccordionIcons.closeId}
 									onSelect={(newImage) =>
 										setAttributes({
-											accordionCustomIcons: {
-												...accordionCustomIcons,
+											customAccordionIcons: {
+												...customAccordionIcons,
 												closeId: newImage.id,
 												closeUrl: newImage.url,
 											},
-											accordionIcons: {
-												...accordionIcons,
-												closeUrl: "",
-											},
-											iconType: "custom",
 										})
 									}
 									render={({ open }) => {
-										if (0 == accordionCustomIcons.closeId) {
+										if (0 == customAccordionIcons.closeId) {
 											return (
 												<Button
 													className="components-button is-primary"
@@ -261,15 +258,15 @@ export default function Edit({ attributes, setAttributes }) {
 															aspectRatio: "16/9",
 															objectFit: "contain",
 														}}
-														src={accordionCustomIcons.closeUrl}
+														src={customAccordionIcons.closeUrl}
 														onClick={open}
 													/>
 													<Button
 														className="components-button is-secondary"
 														onClick={() =>
 															setAttributes({
-																accordionCustomIcons: {
-																	...accordionCustomIcons,
+																customAccordionIcons: {
+																	...customAccordionIcons,
 																	closeId: 0,
 																	closeUrl: "",
 																},
@@ -294,12 +291,18 @@ export default function Edit({ attributes, setAttributes }) {
 									<Button
 										key={id}
 										className={`components-button is-${
-											accordionIcons.openId === id &&
-											accordionIcons.openUrl !== ""
+											defaultAccordionIcons.openId === id
 												? "primary"
 												: "secondary"
 										}`}
-										onClick={(e) => handleOpenIcon(e, id, svg)}
+										onClick={() =>
+											setAttributes({
+												defaultAccordionIcons: {
+													...defaultAccordionIcons,
+													openId: id,
+												},
+											})
+										}
 									>
 										<span dangerouslySetInnerHTML={{ __html: svg }} />
 									</Button>
@@ -311,12 +314,18 @@ export default function Edit({ attributes, setAttributes }) {
 									<Button
 										key={id}
 										className={`components-button is-${
-											accordionIcons.closeId === id &&
-											accordionIcons.closeUrl !== ""
+											defaultAccordionIcons.closeId === id
 												? "primary"
 												: "secondary"
 										}`}
-										onClick={(e) => handleCloseIcon(e, id, svg)}
+										onClick={() =>
+											setAttributes({
+												defaultAccordionIcons: {
+													...defaultAccordionIcons,
+													closeId: id,
+												},
+											})
+										}
 									>
 										<span dangerouslySetInnerHTML={{ __html: svg }} />
 									</Button>

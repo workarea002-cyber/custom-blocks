@@ -5,7 +5,6 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
-import { ChevronUp } from "../accordion/constants";
 /**
  * The save function defines the way in which the different attributes should
  * be combined into the final markup, which is then serialized by the block
@@ -16,39 +15,36 @@ import { ChevronUp } from "../accordion/constants";
  * @return {Element} Element to render.
  */
 export default function save({ attributes }) {
-	const { headingTag, headingContent, iconUrl, iconType } = attributes;
+	const { headTag, headingContent, accordionIcon, iconType } = attributes;
 
 	return (
 		<div {...useBlockProps.save()}>
 			<div className="accordion-header">
-				<RichText.Content
-					tagName={headingTag} // dynamic tag (h2, h3, etc.)
-					value={headingContent}
-				/>
+				<RichText.Content tagName={headTag} value={headingContent} />
 				<div className="accordion-icon-btn">
 					{iconType === "default" ? (
 						<>
 							<span
 								className="open-icon"
-								dangerouslySetInnerHTML={{ __html: iconUrl.openUrl }}
+								dangerouslySetInnerHTML={{ __html: accordionIcon.openUrl }}
 							/>
 							<span
 								className="close-icon"
-								dangerouslySetInnerHTML={{ __html: iconUrl.closeUrl }}
+								dangerouslySetInnerHTML={{ __html: accordionIcon.closeUrl }}
 							/>
 						</>
 					) : (
 						<>
 							<img
 								className="open-icon"
-								src={iconUrl.openUrl}
+								src={accordionIcon.openUrl}
 								alt="icon"
 								width={24}
 								height={24}
 							/>
 							<img
 								className="close-icon"
-								src={iconUrl.closeUrl}
+								src={accordionIcon.closeUrl}
 								alt="icon"
 								width={24}
 								height={24}
@@ -59,7 +55,7 @@ export default function save({ attributes }) {
 			</div>
 
 			<div className="accordion-content">
-				<div>
+				<div className="inner-wrapper">
 					<InnerBlocks.Content />
 				</div>
 			</div>

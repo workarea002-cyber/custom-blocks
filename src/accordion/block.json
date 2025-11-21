@@ -10,6 +10,10 @@
 	"example": {},
 	"allowedBlocks": ["custom-blocks/accordion-item"],
 	"attributes": {
+		"headingTag": {
+			"type": "string",
+			"default": "h3"
+		},
 		"textColor": {
 			"type": "string",
 			"default": ""
@@ -44,7 +48,7 @@
 			"type": "string",
 			"default": "8px"
 		},
-		"accordionCustomIcons": {
+		"customAccordionIcons": {
 			"type": "object",
 			"default": {
 				"openId": 0,
@@ -53,13 +57,11 @@
 				"closeUrl": ""
 			}
 		},
-		"accordionIcons": {
+		"defaultAccordionIcons": {
 			"type": "object",
 			"default": {
 				"openId": 1,
-				"closeId": 4,
-				"openUrl": "",
-				"closeUrl": ""
+				"closeId": 4
 			}
 		},
 		"iconType": {
@@ -68,8 +70,9 @@
 		}
 	},
 	"providesContext": {
-		"accordionIcons": "accordionIcons",
-		"accordionCustomIcons": "accordionCustomIcons",
+		"headingTag": "headingTag",
+		"defaultAccordionIcons": "defaultAccordionIcons",
+		"customAccordionIcons": "customAccordionIcons",
 		"iconType": "iconType"
 	},
 	"supports": {
