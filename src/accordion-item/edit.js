@@ -37,10 +37,12 @@ export default function Edit({ attributes, setAttributes, context }) {
 	const { headingContent, headTag, allowedBlocks, accordionIcon, iconType } =
 		attributes;
 
-	const defaultIconContext = context["defaultAccordionIcons"];
-	const customIconContext = context["customAccordionIcons"];
-	const iconTypeContext = context["iconType"];
-	const headingTagContext = context["headingTag"];
+	const {
+		defaultAccordionIcons: defaultIconContext,
+		customAccordionIcons: customIconContext,
+		iconType: iconTypeContext,
+		headingTag: headingTagContext,
+	} = context;
 
 	useEffect(() => {
 		let openUrl, closeUrl;
