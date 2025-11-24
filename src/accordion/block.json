@@ -15,12 +15,21 @@
 			"default": "h3"
 		},
 		"textColor": {
-			"type": "string",
-			"default": ""
+			"type": "object",
+			"default": {
+				"headingColor": "",
+				"activeHeadingColor": "",
+				"contentColor": ""
+			}
 		},
 		"backgroundColor": {
-			"type": "string",
-			"default": ""
+			"type": "object",
+			"default": {
+				"bgColor": "",
+				"activeBgColor": "",
+				"headerBgColor": "",
+				"contentBgColor": ""
+			}
 		},
 		"padding": {
 			"type": "object",
@@ -34,10 +43,10 @@
 		"borderRadius": {
 			"type": "object",
 			"default": {
-				"top": "",
-				"right": "",
-				"bottom": "",
-				"left": ""
+				"top": "8px",
+				"right": "8px",
+				"bottom": "8px",
+				"left": "8px"
 			}
 		},
 		"gap": {
@@ -60,20 +69,28 @@
 		"defaultAccordionIcons": {
 			"type": "object",
 			"default": {
-				"openId": 1,
-				"closeId": 4
+				"openId": 4,
+				"closeId": 1
 			}
 		},
 		"iconType": {
 			"type": "string",
 			"default": "default"
+		},
+		"iconColor": {
+			"type": "object",
+			"default": {
+				"fill": "#000000",
+				"stroke": "#000000"
+			}
 		}
 	},
 	"providesContext": {
 		"headingTag": "headingTag",
 		"defaultAccordionIcons": "defaultAccordionIcons",
 		"customAccordionIcons": "customAccordionIcons",
-		"iconType": "iconType"
+		"iconType": "iconType",
+		"iconColor": "iconColor"
 	},
 	"supports": {
 		"html": false,
@@ -106,7 +123,8 @@
 			"radius": true,
 			"width": true,
 			"style": true
-		}
+		},
+		"inserter": true
 	},
 	"textdomain": "my-custom-blocks",
 	"editorStyle": "file:./index.css",

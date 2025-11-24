@@ -4,12 +4,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	);
 
 	accordionItems.forEach((accordionItem) => {
-		const accordionHeader = accordionItem.querySelector(".accordion-header");
+		const accordionTrigger = accordionItem.querySelector(".accordion-trigger");
 		const accordionContent = accordionItem.querySelector(".accordion-content");
 
 		accordionContent.style.maxHeight = "0px";
 
-		accordionHeader.addEventListener("click", () => {
+		accordionTrigger.addEventListener("click", () => {
 			accordionItems.forEach((item) => {
 				if (item !== accordionItem) {
 					item.classList.remove("show-text");

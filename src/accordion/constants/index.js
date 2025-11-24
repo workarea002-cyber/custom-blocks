@@ -366,3 +366,72 @@ export const Icons = [
 			</svg>`,
 	},
 ];
+
+export const bgColorControl = [
+	{
+		label: "Accordion Background",
+		attribute: "bgColor",
+	},
+	{
+		label: "Header Background",
+		attribute: "headerBgColor",
+	},
+	{
+		label: "Header Active Background",
+		attribute: "activeBgColor",
+	},
+	{
+		label: "Content Background",
+		attribute: "contentBgColor",
+	},
+];
+
+export const textColorControl = [
+	{
+		label: "Heading Color",
+		attribute: "headingColor",
+	},
+	{
+		label: "Content Color",
+		attribute: "contentColor",
+	},
+	{
+		label: "Active Heading Color",
+		attribute: "activeHeadingColor",
+	},
+];
+
+export const iconColorControl = [
+	{
+		label: "Icon fill Color",
+		attribute: "fill",
+	},
+	{
+		label: "Icon stroke Color",
+		attribute: "stroke",
+	},
+];
+
+export const customAccordionIconControl = [
+	{
+		title: "Accordion Open",
+		attributeId: "openId",
+		attributeUrl: "openUrl",
+	},
+	{
+		title: "Accordion Close",
+		attributeId: "closeId",
+		attributeUrl: "closeUrl",
+	},
+];
+
+export const defaultAccordionIconControl = [
+	{
+		title: "Accordion Open",
+		attributeId: "openId",
+	},
+	{
+		title: "Accordion Close",
+		attributeId: "closeId",
+	},
+];

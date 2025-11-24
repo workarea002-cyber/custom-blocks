@@ -44,6 +44,8 @@ export default function Edit({ attributes, setAttributes, context }) {
 		headingTag: headingTagContext,
 	} = context;
 
+	console.log(context);
+
 	useEffect(() => {
 		let openUrl, closeUrl;
 
@@ -55,7 +57,7 @@ export default function Edit({ attributes, setAttributes, context }) {
 			setAttributes({ iconType: iconTypeContext });
 		}
 
-		if (iconType == "custom") {
+		if (iconType === "custom") {
 			openUrl = customIconContext.openUrl;
 			closeUrl = customIconContext.closeUrl;
 		} else {
@@ -85,27 +87,35 @@ export default function Edit({ attributes, setAttributes, context }) {
 		defaultIconContext.closeId,
 		customIconContext.openUrl,
 		customIconContext.closeUrl,
+		accordionIcon.openUrl,
+		accordionIcon.closeUrl,
 	]);
 
 	const innerBlockProps = useInnerBlocksProps({
 		allowedBlocks,
 		className: "inner-wrapper",
 		template: [["core/paragraph", { placeholder: "Add your text..." }]],
+		defaultBlock: {
+			name: "core/paragraph",
+			attributes: { content: "Add your text..." },
+		},
 		orientation: "vertical",
+		directInsert: true,
 	});
+	const TagName = headTag || "h3";
 
 	return (
 		<div {...useBlockProps()}>
-			<div className="accordion-header">
-				<RichText
-					tagName={headTag}
-					value={headingContent}
-					className="heading"
-					onChange={(value) => setAttributes({ headingContent: value })}
-					placeholder="Accordion title..."
-					allowedFormats={["core/bold", "core/italic"]}
-				/>
-				<div className="accordion-icon-btn">
+			<TagName className="accordion-header-wrap">
+				<button className="accordion-trigger">
+					<RichText
+						tagName="span"
+						value={headingContent}
+						className="heading"
+						onChange={(value) => setAttributes({ headingContent: value })}
+						placeholder="Accordion title..."
+						allowedFormats={["core/bold", "core/italic"]}
+					/>
 					{iconType === "default" ? (
 						<>
 							<span
@@ -135,8 +145,8 @@ export default function Edit({ attributes, setAttributes, context }) {
 							/>
 						</>
 					)}
-				</div>
-			</div>
+				</button>
+			</TagName>
 
 			<div className="accordion-content">
 				<div {...innerBlockProps}></div>

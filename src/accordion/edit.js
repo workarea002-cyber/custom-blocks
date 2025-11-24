@@ -17,6 +17,7 @@ import {
 	ColorPalette,
 	useBlockProps,
 	MediaUpload,
+	useSettings,
 } from "@wordpress/block-editor";
 import {
 	PanelBody,
@@ -34,7 +35,14 @@ import {
  * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
  */
 import "./editor.scss";
-import { Icons } from "./constants";
+import {
+	bgColorControl,
+	customAccordionIconControl,
+	defaultAccordionIconControl,
+	iconColorControl,
+	Icons,
+	textColorControl,
+} from "./constants";
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -43,6 +51,45 @@ import { Icons } from "./constants";
  *
  * @return {Element} Element to render.
  */
+
+wp.domReady(() => {
+	initAccordion(); // Reuse same function!
+});
+
+function initAccordion() {
+	document.addEventListener("DOMContentLoaded", () => {
+		const accordionItems = document.querySelectorAll(
+			".wp-block-custom-blocks-accordion-item",
+		);
+
+		accordionItems.forEach((accordionItem) => {
+			const accordionTrigger =
+				accordionItem.querySelector(".accordion-trigger");
+			const accordionContent =
+				accordionItem.querySelector(".accordion-content");
+
+			accordionContent.style.maxHeight = "0px";
+
+			accordionTrigger.addEventListener("click", () => {
+				accordionItems.forEach((item) => {
+					if (item !== accordionItem) {
+						item.classList.remove("show-text");
+						const otherContent = item.querySelector(".accordion-content");
+						otherContent.style.maxHeight = "0px";
+					}
+				});
+				const open = accordionItem.classList.toggle("show-text");
+				if (open) {
+					const fullHeight = accordionContent.scrollHeight;
+					accordionContent.style.maxHeight = fullHeight + "px";
+				} else {
+					accordionContent.style.maxHeight = "0px";
+				}
+			});
+		});
+	});
+}
+
 export default function Edit({ attributes, setAttributes }) {
 	const {
 		textColor,
@@ -56,22 +103,34 @@ export default function Edit({ attributes, setAttributes }) {
 		defaultAccordionIcons,
 		iconType,
 		headingTag,
+		iconColor,
 	} = attributes;
+
+	console.log(attributes);
+
+	const [themeColors] = useSettings("color.palette");
 
 	const blockProps = useBlockProps({
 		style: {
-			"--accordion-bg": attributes.backgroundColor,
-			"--accordion-textColor": attributes.textColor,
-			"--accordion-gap": attributes.gap,
-			"--accordion-header-padding-top": attributes.padding.top,
-			"--accordion-header-padding-right": attributes.padding.right,
-			"--accordion-header-padding-bottom": attributes.padding.bottom,
-			"--accordion-header-padding-left": attributes.padding.left,
-			"--accordion-content-spacing": attributes.contentSpacing,
-			"--accordion-radius-top": attributes.borderRadius.top,
-			"--accordion-radius-right": attributes.borderRadius.right,
-			"--accordion-radius-bottom": attributes.borderRadius.bottom,
-			"--accordion-radius-left": attributes.borderRadius.left,
+			"--accordion-bg": backgroundColor.bgColor,
+			"--accordion-active-bg": backgroundColor.activeBgColor,
+			"--accordion-header-bg": backgroundColor.headerBgColor,
+			"--accordion-content-bg": backgroundColor.contentBgColor,
+			"--accordion-header-color": textColor.headerColor,
+			"--accordion-active-header-color": textColor.activeHeaderColor,
+			"--accordion-content-color": textColor.contentColor,
+			"--accordion-gap": gap,
+			"--accordion-padding-top": padding.top,
+			"--accordion-padding-right": padding.right,
+			"--accordion-padding-bottom": padding.bottom,
+			"--accordion-padding-left": padding.left,
+			"--accordion-content-spacing": contentSpacing,
+			"--accordion-radius-top": borderRadius.top,
+			"--accordion-radius-right": borderRadius.right,
+			"--accordion-radius-bottom": borderRadius.bottom,
+			"--accordion-radius-left": borderRadius.left,
+			"--accordion-icon-fill-color": iconColor.fill,
+			"--accordion-icon-stroke-color": iconColor.stroke,
 		},
 	});
 
@@ -96,26 +155,51 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 				</PanelBody>
 
-				<PanelBody title="Accordion Item Color" initialOpen={false}>
-					<p>
-						<strong>Background Color</strong>
-					</p>
-					<ColorPalette
-						value={backgroundColor}
-						onChange={(newColor) =>
-							setAttributes({ backgroundColor: newColor })
-						}
-					/>
-					<p>
-						<strong>Text Color</strong>
-					</p>
-					<ColorPalette
-						value={textColor}
-						onChange={(newColor) => setAttributes({ textColor: newColor })}
-					/>
+				<PanelBody title="Accordion Color" initialOpen={false}>
+					{bgColorControl.map(({ label, attribute }) => (
+						<div key={attribute}>
+							<p>
+								<strong>{label}</strong>
+							</p>
+							<ColorPalette
+								colors={themeColors}
+								enableAlpha={true}
+								value={backgroundColor?.[attribute]}
+								onChange={(newColor) =>
+									setAttributes({
+										backgroundColor: {
+											...backgroundColor,
+											[attribute]: newColor,
+										},
+									})
+								}
+							/>
+						</div>
+					))}
+
+					{textColorControl.map(({ label, attribute }) => (
+						<div key={attribute}>
+							<p>
+								<strong>{label}</strong>
+							</p>
+							<ColorPalette
+								value={textColor?.[attribute]}
+								colors={themeColors}
+								enableAlpha={true}
+								onChange={(newColor) =>
+									setAttributes({
+										textColor: {
+											...textColor,
+											[attribute]: newColor,
+										},
+									})
+								}
+							/>
+						</div>
+					))}
 				</PanelBody>
 
-				<PanelBody title="Accordion Item Spacing" initialOpen={false}>
+				<PanelBody title="Accordion Spacing" initialOpen={false}>
 					<BoxControl
 						__next40pxDefaultSize
 						label="Padding"
@@ -159,180 +243,123 @@ export default function Edit({ attributes, setAttributes }) {
 					{iconType === "custom" ? (
 						<div className="media-lib-selector">
 							<h3>Custom Icons</h3>
-							<div className="select-open-icon">
-								<h4>Accordion Open</h4>
-								<MediaUpload
-									title="Select Image"
-									allowedTypes={[
-										"image/jpeg",
-										"image/png",
-										"image/webp",
-										"image/svg+xml",
-									]}
-									value={customAccordionIcons.openId}
-									onSelect={(newImage) =>
-										setAttributes({
-											customAccordionIcons: {
-												...customAccordionIcons,
-												openId: newImage.id,
-												openUrl: newImage.url,
-											},
-										})
-									}
-									render={({ open }) => {
-										if (0 == customAccordionIcons.openId) {
-											return (
-												<Button
-													className="components-button is-primary"
-													onClick={open}
-												>
-													Select
-												</Button>
-											);
-										} else {
-											return (
-												<div>
-													<img
-														src={customAccordionIcons.openUrl}
-														style={{
-															aspectRatio: "16/9",
-															objectFit: "contain",
-														}}
-														onClick={open}
-													/>
-													<Button
-														className="components-button is-secondary"
-														onClick={() =>
-															setAttributes({
-																customAccordionIcons: {
-																	...customAccordionIcons,
-																	openId: 0,
-																	openUrl: "",
-																},
-															})
-														}
-													>
-														Delete
-													</Button>
-												</div>
-											);
-										}
-									}}
-								/>
-							</div>
-							<div className="select-close-icon">
-								<h4>Accordion Close</h4>
-								<MediaUpload
-									title="Select Image"
-									allowedTypes={[
-										"image/jpeg",
-										"image/png",
-										"image/webp",
-										"image/svg+xml",
-									]}
-									value={customAccordionIcons.closeId}
-									onSelect={(newImage) =>
-										setAttributes({
-											customAccordionIcons: {
-												...customAccordionIcons,
-												closeId: newImage.id,
-												closeUrl: newImage.url,
-											},
-										})
-									}
-									render={({ open }) => {
-										if (0 == customAccordionIcons.closeId) {
-											return (
-												<Button
-													className="components-button is-primary"
-													onClick={open}
-												>
-													Select
-												</Button>
-											);
-										} else {
-											return (
-												<div>
-													<img
-														style={{
-															aspectRatio: "16/9",
-															objectFit: "contain",
-														}}
-														src={customAccordionIcons.closeUrl}
-														onClick={open}
-													/>
-													<Button
-														className="components-button is-secondary"
-														onClick={() =>
-															setAttributes({
-																customAccordionIcons: {
-																	...customAccordionIcons,
-																	closeId: 0,
-																	closeUrl: "",
-																},
-															})
-														}
-													>
-														Delete
-													</Button>
-												</div>
-											);
-										}
-									}}
-								/>
-							</div>
+							{customAccordionIconControl.map(
+								({ title, attributeId, attributeUrl }) => (
+									<div className="select-open-icon" key={title}>
+										<h4>{title}</h4>
+										<MediaUpload
+											title="Select Image"
+											allowedTypes={[
+												"image/jpeg",
+												"image/png",
+												"image/webp",
+												"image/svg+xml",
+											]}
+											value={customAccordionIcons?.[attributeId]}
+											onSelect={(newImage) =>
+												setAttributes({
+													customAccordionIcons: {
+														...customAccordionIcons,
+														[attributeId]: newImage.id,
+														[attributeUrl]: newImage.url,
+													},
+												})
+											}
+											render={({ open }) => {
+												if (0 == customAccordionIcons?.[attributeId]) {
+													return (
+														<Button
+															className="components-button is-primary"
+															onClick={open}
+														>
+															Select
+														</Button>
+													);
+												} else {
+													return (
+														<div>
+															<img
+																src={customAccordionIcons?.[attributeUrl]}
+																style={{
+																	aspectRatio: "16/9",
+																	objectFit: "contain",
+																}}
+																onClick={open}
+															/>
+															<Button
+																className="components-button is-secondary"
+																onClick={() =>
+																	setAttributes({
+																		customAccordionIcons: {
+																			...customAccordionIcons,
+																			[attributeId]: 0,
+																			[attributeUrl]: "",
+																		},
+																	})
+																}
+															>
+																Delete
+															</Button>
+														</div>
+													);
+												}
+											}}
+										/>
+									</div>
+								),
+							)}
 						</div>
 					) : (
 						<div className="accordion-icons">
 							<h3>Default Icons</h3>
-							<div className="open-icon">
-								<h4>Accordion Open</h4>
-								{Icons.map(({ id, svg }) => (
-									<Button
-										key={id}
-										className={`components-button is-${
-											defaultAccordionIcons.openId === id
-												? "primary"
-												: "secondary"
-										}`}
-										onClick={() =>
-											setAttributes({
-												defaultAccordionIcons: {
-													...defaultAccordionIcons,
-													openId: id,
-												},
-											})
-										}
-									>
-										<span dangerouslySetInnerHTML={{ __html: svg }} />
-									</Button>
-								))}
-							</div>
-							<div className="close-icon">
-								<h4>Accordion Close</h4>
-								{Icons.map(({ id, svg }) => (
-									<Button
-										key={id}
-										className={`components-button is-${
-											defaultAccordionIcons.closeId === id
-												? "primary"
-												: "secondary"
-										}`}
-										onClick={() =>
-											setAttributes({
-												defaultAccordionIcons: {
-													...defaultAccordionIcons,
-													closeId: id,
-												},
-											})
-										}
-									>
-										<span dangerouslySetInnerHTML={{ __html: svg }} />
-									</Button>
-								))}
-							</div>
+							{defaultAccordionIconControl.map(({ title, attributeId }) => (
+								<div className="open-icon" key={title + attributeId}>
+									<h4>{title}</h4>
+									{Icons.map(({ id, svg }) => (
+										<Button
+											key={id}
+											className={`components-button is-${
+												defaultAccordionIcons?.[attributeId] === id
+													? "primary"
+													: "secondary"
+											}`}
+											onClick={() =>
+												setAttributes({
+													defaultAccordionIcons: {
+														...defaultAccordionIcons,
+														[attributeId]: id,
+													},
+												})
+											}
+										>
+											<span dangerouslySetInnerHTML={{ __html: svg }} />
+										</Button>
+									))}
+								</div>
+							))}
 						</div>
 					)}
+
+					{iconColorControl.map(({ label, attribute }) => (
+						<div key={attribute}>
+							<p>
+								<strong>{label}</strong>
+							</p>
+							<ColorPalette
+								colors={themeColors}
+								enableAlpha={true}
+								value={iconColor?.[attribute]}
+								onChange={(newColor) =>
+									setAttributes({
+										iconColor: {
+											...iconColor,
+											[attribute]: newColor,
+										},
+									})
+								}
+							/>
+						</div>
+					))}
 				</PanelBody>
 			</InspectorControls>
 
@@ -341,6 +368,7 @@ export default function Edit({ attributes, setAttributes }) {
 					allowedBlocks={allowedBlocks}
 					template={[["custom-blocks/accordion-item"]]}
 					orientation="vertical"
+					renderAppender={InnerBlocks.ButtonBlockAppender}
 				/>
 			</div>
 		</>

@@ -7,81 +7,106 @@
 
 .wp-block-custom-blocks-accordion {
 	.wp-block-custom-blocks-accordion-item:not(:last-child) {
-		margin-bottom: var(--accordion-gap);
+		margin-bottom: var(--accordion-gap, 24px);
 	}
 
 	.wp-block-custom-blocks-accordion-item {
 		overflow: hidden;
-		border-radius: var(--accordion-radius-left) var(--accordion-radius-left)
-			var(--accordion-radius-bottom) var(--accordion-radius-left);
+		border-radius: var(--accordion-radius-top, 8px)
+			var(--accordion-radius-right, 8px) var(--accordion-radius-bottom, 8px)
+			var(--accordion-radius-left, 8px);
 
-		.accordion-header {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			background-color: var(--accordion-bg);
-			color: var(--accordion-textColor);
-			padding: var(--accordion-header-padding-top)
-				var(--accordion-header-padding-right)
-				var(--accordion-header-padding-bottom)
-				var(--accordion-header-padding-left);
+		background-color: var(--accordion-bg);
 
-			.heading {
-				margin: 0;
-			}
+		.accordion-header-wrap {
+			background-color: var(--accordion-header-bg);
+			color: var(--accordion-header-color);
 
-			.accordion-icon-btn {
+			.accordion-trigger {
 				display: flex;
 				align-items: center;
-				justify-content: center;
+				justify-content: space-between;
 
-				img,
-				span {
+				width: 100%;
+
+				background-color: inherit;
+				color: inherit;
+
+				padding: var(--accordion-padding-top, 16px)
+					var(--accordion-padding-right, 16px)
+					var(--accordion-padding-bottom, 16px)
+					var(--accordion-padding-left, 16px);
+
+				.heading {
+					display: block;
+				}
+
+				.open-icon,
+				.close-icon {
+					display: flex;
+					align-items: center;
+					justify-content: center;
 					width: 24px;
 					height: 24px;
+
+					svg {
+						> path {
+							stroke: var(--accordion-icon-stroke-color, #000000);
+						}
+
+						g {
+							fill: var(--accordion-icon-fill-color, #000000);
+						}
+					}
 				}
 
 				.open-icon {
-					display: block;
+					display: flex;
 				}
+
 				.close-icon {
 					display: none;
 				}
 			}
 		}
+
 		.accordion-content {
 			position: relative;
 			pointer-events: auto;
 			overflow: hidden;
 			max-height: 0;
-			background-color: var(--accordion-bg);
-			color: var(--accordion-textColor);
+			background-color: var(--accordion-content-bg);
+			color: var(--accordion-content-color);
 			transition:
 				max-height 0.3s ease-in-out,
 				padding 0.25s ease-in-out;
 
 			.inner-wrapper {
-				padding: var(--accordion-header-padding-top)
-					var(--accordion-header-padding-right)
-					var(--accordion-header-padding-bottom)
-					var(--accordion-header-padding-left);
+				padding: var(--accordion-padding-top, 16px)
+					var(--accordion-padding-right, 16px)
+					var(--accordion-padding-bottom, 16px)
+					var(--accordion-padding-left, 16px);
 			}
 
 			.inner-wrapper > * {
 				margin: 0;
-				margin-bottom: var(--accordion-content-spacing);
+				margin-bottom: var(--accordion-content-spacing, 8px);
 			}
 		}
 	}
 
 	.wp-block-custom-blocks-accordion-item.show-text {
-		.accordion-header {
-			.accordion-icon-btn {
+		.accordion-header-wrap {
+			background-color: var(--accordion-active-bg);
+			color: var(--accordion-active-header-color);
+
+			.accordion-trigger {
 				.open-icon {
 					display: none;
 				}
+
 				.close-icon {
-					display: block;
+					display: flex;
 				}
 			}
 		}

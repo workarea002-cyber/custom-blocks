@@ -17,11 +17,17 @@ import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
 export default function save({ attributes }) {
 	const { headTag, headingContent, accordionIcon, iconType } = attributes;
 
+	const TagName = headTag || "h3";
+
 	return (
 		<div {...useBlockProps.save()}>
-			<div className="accordion-header">
-				<RichText.Content tagName={headTag} value={headingContent} />
-				<div className="accordion-icon-btn">
+			<TagName className="accordion-header-wrap">
+				<button className="accordion-trigger">
+					<RichText.Content
+						tagName="span"
+						className="heading"
+						value={headingContent}
+					/>
 					{iconType === "default" ? (
 						<>
 							<span
@@ -51,8 +57,8 @@ export default function save({ attributes }) {
 							/>
 						</>
 					)}
-				</div>
-			</div>
+				</button>
+			</TagName>
 
 			<div className="accordion-content">
 				<div className="inner-wrapper">

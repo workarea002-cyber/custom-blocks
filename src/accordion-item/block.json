@@ -16,11 +16,11 @@
 		"headingContent": {
 			"type": "rich-text",
 			"source": "rich-text",
-			"selector": "h1,h2,h3,h4,h5,h6"
+			"selector": ".heading"
 		},
 		"headTag": {
 			"type": "string",
-			"default": "h3"
+			"default": ""
 		},
 		"accordionIcon": {
 			"type": "object",
@@ -31,7 +31,14 @@
 		},
 		"iconType": {
 			"type": "string",
-			"default": "default"
+			"default": ""
+		},
+		"iconColor": {
+			"type": "object",
+			"default": {
+				"fill": "",
+				"stroke": ""
+			}
 		}
 	},
 	"allowedBlocks": ["core/paragraph", "core/image", "core/list"],
@@ -44,7 +51,8 @@
 		"defaultAccordionIcons",
 		"customAccordionIcons",
 		"iconType",
-		"headingTag"
+		"headingTag",
+		"iconColor"
 	],
 	"textdomain": "my-custom-blocks",
 	"editorScript": "file:./index.js"

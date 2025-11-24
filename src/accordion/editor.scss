@@ -4,6 +4,20 @@
 
 .wp-block-custom-blocks-accordion {
 	.wp-block-custom-blocks-accordion-item {
+		.accordion-header-wrap {
+			margin: 0;
+
+			.accordion-trigger {
+				font-size: inherit;
+				font-weight: inherit;
+				font-family: inherit;
+				width: 100%;
+				border: none;
+			}
+			.accordion-trigger:focus {
+				outline: none;
+			}
+		}
 		.accordion-content {
 			max-height: revert;
 		}
@@ -19,32 +33,7 @@
 }
 
 .accordion-icons {
-	display: flex;
-	align-items: flex-start;
-	justify-content: center;
-	flex-direction: column;
-
-	.open-icon {
-		display: flex;
-		flex-wrap: wrap;
-
-		h4 {
-			width: 100%;
-		}
-
-		button {
-			margin: 0 8px 8px 0;
-
-			span {
-				width: 24px;
-				height: 24px;
-
-				svg {
-					fill: none;
-				}
-			}
-		}
-	}
+	.open-icon,
 	.close-icon {
 		display: flex;
 		flex-wrap: wrap;
