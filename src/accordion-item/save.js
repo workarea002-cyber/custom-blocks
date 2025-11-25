@@ -14,53 +14,58 @@ import { InnerBlocks, RichText, useBlockProps } from "@wordpress/block-editor";
  *
  * @return {Element} Element to render.
  */
+
+const Icon = ({ type, url, className }) => {
+	if (type === "default") {
+		return (
+			<span className={className} dangerouslySetInnerHTML={{ __html: url }} />
+		);
+	}
+
+	return <img className={className} src={url} alt="" width={24} height={24} />;
+};
+
 export default function save({ attributes }) {
-	const { headTag, headingContent, accordionIcon, iconType } = attributes;
+	const { headTag, headingContent, accordionIcon, iconType, blockId } =
+		attributes;
 
 	const TagName = headTag || "h3";
 
 	return (
 		<div {...useBlockProps.save()}>
 			<TagName className="accordion-header-wrap">
-				<button className="accordion-trigger">
+				<button
+					id={`accordion-header-${blockId}`}
+					className="accordion-trigger"
+					aria-expanded="false"
+					aria-controls={`accordion-content-${blockId}`}
+				>
 					<RichText.Content
 						tagName="span"
 						className="heading"
 						value={headingContent}
 					/>
-					{iconType === "default" ? (
-						<>
-							<span
-								className="open-icon"
-								dangerouslySetInnerHTML={{ __html: accordionIcon.openUrl }}
-							/>
-							<span
-								className="close-icon"
-								dangerouslySetInnerHTML={{ __html: accordionIcon.closeUrl }}
-							/>
-						</>
-					) : (
-						<>
-							<img
-								className="open-icon"
-								src={accordionIcon.openUrl}
-								alt="icon"
-								width={24}
-								height={24}
-							/>
-							<img
-								className="close-icon"
-								src={accordionIcon.closeUrl}
-								alt="icon"
-								width={24}
-								height={24}
-							/>
-						</>
-					)}
+					<span className="accordion-icon-wrap">
+						<Icon
+							type={iconType}
+							url={accordionIcon.openUrl}
+							className="open-icon"
+						/>
+						<Icon
+							type={iconType}
+							url={accordionIcon.closeUrl}
+							className="close-icon"
+						/>
+					</span>
 				</button>
 			</TagName>
 
-			<div className="accordion-content">
+			<div
+				id={`accordion-content-${blockId}`}
+				className="accordion-content"
+				role="region"
+				aria-labelledby={`accordion-header-${blockId}`}
+			>
 				<div className="inner-wrapper">
 					<InnerBlocks.Content />
 				</div>

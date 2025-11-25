@@ -43,6 +43,7 @@ import {
 	Icons,
 	textColorControl,
 } from "./constants";
+import { ToggleControl } from "@wordpress/components";
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -51,44 +52,6 @@ import {
  *
  * @return {Element} Element to render.
  */
-
-wp.domReady(() => {
-	initAccordion(); // Reuse same function!
-});
-
-function initAccordion() {
-	document.addEventListener("DOMContentLoaded", () => {
-		const accordionItems = document.querySelectorAll(
-			".wp-block-custom-blocks-accordion-item",
-		);
-
-		accordionItems.forEach((accordionItem) => {
-			const accordionTrigger =
-				accordionItem.querySelector(".accordion-trigger");
-			const accordionContent =
-				accordionItem.querySelector(".accordion-content");
-
-			accordionContent.style.maxHeight = "0px";
-
-			accordionTrigger.addEventListener("click", () => {
-				accordionItems.forEach((item) => {
-					if (item !== accordionItem) {
-						item.classList.remove("show-text");
-						const otherContent = item.querySelector(".accordion-content");
-						otherContent.style.maxHeight = "0px";
-					}
-				});
-				const open = accordionItem.classList.toggle("show-text");
-				if (open) {
-					const fullHeight = accordionContent.scrollHeight;
-					accordionContent.style.maxHeight = fullHeight + "px";
-				} else {
-					accordionContent.style.maxHeight = "0px";
-				}
-			});
-		});
-	});
-}
 
 export default function Edit({ attributes, setAttributes }) {
 	const {
@@ -104,9 +67,8 @@ export default function Edit({ attributes, setAttributes }) {
 		iconType,
 		headingTag,
 		iconColor,
+		multiple,
 	} = attributes;
-
-	console.log(attributes);
 
 	const [themeColors] = useSettings("color.palette");
 
@@ -132,12 +94,13 @@ export default function Edit({ attributes, setAttributes }) {
 			"--accordion-icon-fill-color": iconColor.fill,
 			"--accordion-icon-stroke-color": iconColor.stroke,
 		},
+		"data-multiple": multiple,
 	});
 
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title="Accordion header Tag" initialOpen={true}>
+				<PanelBody title="Accordion Setting" initialOpen={true}>
 					<SelectControl
 						label="Tag Level"
 						value={headingTag}
@@ -152,6 +115,14 @@ export default function Edit({ attributes, setAttributes }) {
 						onChange={(newTag) => setAttributes({ headingTag: newTag })}
 						__next40pxDefaultSize
 						__nextHasNoMarginBottom
+					/>
+					<ToggleControl
+						__nextHasNoMarginBottom
+						label="Multi Open Accordion"
+						checked={multiple}
+						onChange={(newValue) => {
+							setAttributes({ multiple: newValue });
+						}}
 					/>
 				</PanelBody>
 

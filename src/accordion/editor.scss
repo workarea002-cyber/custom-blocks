@@ -13,6 +13,20 @@
 				font-family: inherit;
 				width: 100%;
 				border: none;
+
+				.heading {
+					cursor: auto;
+				}
+
+				.accordion-icon-wrap {
+					width: auto;
+					height: auto;
+
+					.open-icon,
+					.close-icon {
+						display: block;
+					}
+				}
 			}
 			.accordion-trigger:focus {
 				outline: none;
@@ -24,6 +38,7 @@
 	}
 }
 
+// Sidebar Media selector
 .media-lib-selector {
 	display: flex;
 	align-items: flex-start;
@@ -32,6 +47,7 @@
 	margin-bottom: 24px;
 }
 
+// Side bar icons
 .accordion-icons {
 	.open-icon,
 	.close-icon {

@@ -39,6 +39,10 @@
 				"fill": "",
 				"stroke": ""
 			}
+		},
+		"blockId": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"allowedBlocks": ["core/paragraph", "core/image", "core/list"],

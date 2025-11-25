@@ -41,31 +41,33 @@
 					display: block;
 				}
 
-				.open-icon,
-				.close-icon {
-					display: flex;
-					align-items: center;
-					justify-content: center;
+				.accordion-icon-wrap {
+					display: block;
 					width: 24px;
 					height: 24px;
 
-					svg {
-						> path {
-							stroke: var(--accordion-icon-stroke-color, #000000);
-						}
+					.open-icon,
+					.close-icon {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						width: 24px;
+						height: 24px;
 
-						g {
-							fill: var(--accordion-icon-fill-color, #000000);
+						svg {
+							> path {
+								stroke: var(--accordion-icon-stroke-color, #000000);
+							}
+
+							g {
+								fill: var(--accordion-icon-fill-color, #000000);
+							}
 						}
 					}
-				}
 
-				.open-icon {
-					display: flex;
-				}
-
-				.close-icon {
-					display: none;
+					.close-icon {
+						display: none;
+					}
 				}
 			}
 		}
@@ -101,12 +103,14 @@
 			color: var(--accordion-active-header-color);
 
 			.accordion-trigger {
-				.open-icon {
-					display: none;
-				}
+				.accordion-icon-wrap {
+					.open-icon {
+						display: none;
+					}
 
-				.close-icon {
-					display: flex;
+					.close-icon {
+						display: flex;
+					}
 				}
 			}
 		}

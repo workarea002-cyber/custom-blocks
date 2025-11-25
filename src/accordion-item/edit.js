@@ -33,9 +33,26 @@ import { Icons } from "../accordion/constants";
  *
  * @return {Element} Element to render.
  */
-export default function Edit({ attributes, setAttributes, context }) {
-	const { headingContent, headTag, allowedBlocks, accordionIcon, iconType } =
-		attributes;
+
+const Icon = ({ type, url, className }) => {
+	if (type === "default") {
+		return (
+			<span className={className} dangerouslySetInnerHTML={{ __html: url }} />
+		);
+	}
+
+	return <img className={className} src={url} alt="" width={24} height={24} />;
+};
+
+export default function Edit({ attributes, setAttributes, context, clientId }) {
+	const {
+		headingContent,
+		headTag,
+		allowedBlocks,
+		accordionIcon,
+		iconType,
+		blockId,
+	} = attributes;
 
 	const {
 		defaultAccordionIcons: defaultIconContext,
@@ -44,10 +61,12 @@ export default function Edit({ attributes, setAttributes, context }) {
 		headingTag: headingTagContext,
 	} = context;
 
-	console.log(context);
-
 	useEffect(() => {
 		let openUrl, closeUrl;
+
+		if (!blockId) {
+			setAttributes({ blockId: clientId });
+		}
 
 		if (headTag !== headingTagContext) {
 			setAttributes({ headTag: headingTagContext });
@@ -102,12 +121,18 @@ export default function Edit({ attributes, setAttributes, context }) {
 		orientation: "vertical",
 		directInsert: true,
 	});
+
 	const TagName = headTag || "h3";
 
 	return (
 		<div {...useBlockProps()}>
 			<TagName className="accordion-header-wrap">
-				<button className="accordion-trigger">
+				<button
+					id={`accordion-header-${blockId}`}
+					className="accordion-trigger"
+					aria-expanded="false"
+					aria-controls={`accordion-content-${blockId}`}
+				>
 					<RichText
 						tagName="span"
 						value={headingContent}
@@ -116,39 +141,27 @@ export default function Edit({ attributes, setAttributes, context }) {
 						placeholder="Accordion title..."
 						allowedFormats={["core/bold", "core/italic"]}
 					/>
-					{iconType === "default" ? (
-						<>
-							<span
-								className="open-icon"
-								dangerouslySetInnerHTML={{ __html: accordionIcon.openUrl }}
-							/>
-							<span
-								className="close-icon"
-								dangerouslySetInnerHTML={{ __html: accordionIcon.closeUrl }}
-							/>
-						</>
-					) : (
-						<>
-							<img
-								className="open-icon"
-								src={accordionIcon.openUrl}
-								alt="icon"
-								width={24}
-								height={24}
-							/>
-							<img
-								className="close-icon"
-								src={accordionIcon.closeUrl}
-								alt="icon"
-								width={24}
-								height={24}
-							/>
-						</>
-					)}
+					<span className="accordion-icon-wrap">
+						<Icon
+							type={iconType}
+							url={accordionIcon.openUrl}
+							className="open-icon"
+						/>
+						<Icon
+							type={iconType}
+							url={accordionIcon.closeUrl}
+							className="close-icon"
+						/>
+					</span>
 				</button>
 			</TagName>
 
-			<div className="accordion-content">
+			<div
+				id={`accordion-content-${blockId}`}
+				className="accordion-content"
+				role="region"
+				aria-labelledby={`accordion-header-${blockId}`}
+			>
 				<div {...innerBlockProps}></div>
 			</div>
 		</div>

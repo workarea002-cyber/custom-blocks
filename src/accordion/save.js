@@ -24,6 +24,7 @@ export default function save({ attributes }) {
 		contentSpacing,
 		borderRadius,
 		iconColor,
+		multiple,
 	} = attributes;
 
 	const blockProps = useBlockProps.save({
@@ -48,6 +49,7 @@ export default function save({ attributes }) {
 			"--accordion-icon-fill-color": iconColor.fill,
 			"--accordion-icon-stroke-color": iconColor.stroke,
 		},
+		"data-multiple": multiple,
 	});
 
 	return (
