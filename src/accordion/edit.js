@@ -19,14 +19,6 @@ import {
 	MediaUpload,
 	useSettings,
 } from "@wordpress/block-editor";
-import {
-	PanelBody,
-	__experimentalInputControl as InputControl,
-	BoxControl,
-	Button,
-	RadioControl,
-	SelectControl,
-} from "@wordpress/components";
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -43,7 +35,15 @@ import {
 	Icons,
 	textColorControl,
 } from "./constants";
-import { ToggleControl } from "@wordpress/components";
+import {
+	PanelBody,
+	__experimentalInputControl as InputControl,
+	BoxControl,
+	Button,
+	RadioControl,
+	SelectControl,
+	ToggleControl,
+} from "@wordpress/components";
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
