@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "custom-blocks/accordion",
-	"version": "0.1.0",
+	"version": "1.0.1",
 	"title": "Accordion",
 	"category": "widgets",
 	"icon": "smiley",
@@ -10,6 +10,13 @@
 	"example": {},
 	"allowedBlocks": ["custom-blocks/accordion-item"],
 	"attributes": {
+		"fontSize": {
+			"type": "object",
+			"default": {
+				"heading": "22px",
+				"content": "16px"
+			}
+		},
 		"headingTag": {
 			"type": "string",
 			"default": "h3"

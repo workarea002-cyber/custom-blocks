@@ -13,11 +13,10 @@ import { __ } from "@wordpress/i18n";
  */
 import {
 	InnerBlocks,
-	InspectorControls,
-	ColorPalette,
-	useBlockProps,
 	MediaUpload,
 	useSettings,
+	useBlockProps,
+	InspectorControls,
 } from "@wordpress/block-editor";
 
 /**
@@ -28,21 +27,28 @@ import {
  */
 import "./editor.scss";
 import {
+	Icons,
 	bgColorControl,
+	fontSizeControl,
+	iconColorControl,
+	textColorControl,
 	customAccordionIconControl,
 	defaultAccordionIconControl,
-	iconColorControl,
-	Icons,
-	textColorControl,
 } from "./constants";
+
 import {
-	PanelBody,
-	__experimentalInputControl as InputControl,
-	BoxControl,
+	Flex,
 	Button,
+	PanelBody,
+	ColorPalette,
+	BoxControl,
 	RadioControl,
 	SelectControl,
 	ToggleControl,
+	FontSizePicker,
+	__experimentalText as Text,
+	__experimentalVStack as VStack,
+	__experimentalUnitControl as UnitControl,
 } from "@wordpress/components";
 /**
  * The edit function describes the structure of your block in the context of the
@@ -68,18 +74,18 @@ export default function Edit({ attributes, setAttributes }) {
 		headingTag,
 		iconColor,
 		multiple,
+		fontSize,
 	} = attributes;
 
 	const [themeColors] = useSettings("color.palette");
-
 	const blockProps = useBlockProps({
 		style: {
 			"--accordion-bg": backgroundColor.bgColor,
 			"--accordion-active-bg": backgroundColor.activeBgColor,
 			"--accordion-header-bg": backgroundColor.headerBgColor,
 			"--accordion-content-bg": backgroundColor.contentBgColor,
-			"--accordion-header-color": textColor.headerColor,
-			"--accordion-active-header-color": textColor.activeHeaderColor,
+			"--accordion-header-color": textColor.headingColor,
+			"--accordion-active-header-color": textColor.activeHeadingColor,
 			"--accordion-content-color": textColor.contentColor,
 			"--accordion-gap": gap,
 			"--accordion-padding-top": padding.top,
@@ -93,233 +99,254 @@ export default function Edit({ attributes, setAttributes }) {
 			"--accordion-radius-left": borderRadius.left,
 			"--accordion-icon-fill-color": iconColor.fill,
 			"--accordion-icon-stroke-color": iconColor.stroke,
+			"--accordion-heading-fontsize": fontSize?.heading,
+			"--accordion-content-fontsize": fontSize?.content,
 		},
 		"data-multiple": multiple,
 	});
 
 	return (
 		<>
-			<InspectorControls>
-				<PanelBody title="Accordion Setting" initialOpen={true}>
-					<SelectControl
-						label="Tag Level"
-						value={headingTag}
-						options={[
-							{ label: "h1", value: "h1" },
-							{ label: "h2", value: "h2" },
-							{ label: "h3", value: "h3" },
-							{ label: "h4", value: "h4" },
-							{ label: "h5", value: "h5" },
-							{ label: "h6", value: "h6" },
-						]}
-						onChange={(newTag) => setAttributes({ headingTag: newTag })}
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
-					/>
-					<ToggleControl
-						__nextHasNoMarginBottom
-						label="Multi Open Accordion"
-						checked={multiple}
-						onChange={(newValue) => {
-							setAttributes({ multiple: newValue });
-						}}
-					/>
+			<InspectorControls group="settings">
+				<PanelBody title="Tag" initialOpen={true}>
+					<VStack>
+						<SelectControl
+							label="Tag Level"
+							value={headingTag}
+							options={[
+								{ label: "h1", value: "h1" },
+								{ label: "h2", value: "h2" },
+								{ label: "h3", value: "h3" },
+								{ label: "h4", value: "h4" },
+								{ label: "h5", value: "h5" },
+								{ label: "h6", value: "h6" },
+							]}
+							onChange={(newTag) => setAttributes({ headingTag: newTag })}
+							__next40pxDefaultSize
+							__nextHasNoMarginBottom
+						/>
+						<ToggleControl
+							__nextHasNoMarginBottom
+							label="Multi Open Accordion"
+							checked={multiple}
+							onChange={(newValue) => {
+								setAttributes({ multiple: newValue });
+							}}
+						/>
+					</VStack>
+				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="styles">
+				<PanelBody title="Background Color" initialOpen={false}>
+					<VStack>
+						{bgColorControl.map(({ label, attribute }) => (
+							<VStack key={attribute}>
+								<Text upperCase>{label}</Text>
+								<ColorPalette
+									colors={themeColors}
+									enableAlpha={true}
+									value={backgroundColor?.[attribute]}
+									disableCustomColors={true}
+									onChange={(newColor) =>
+										setAttributes({
+											backgroundColor: {
+												...backgroundColor,
+												[attribute]: newColor,
+											},
+										})
+									}
+								/>
+							</VStack>
+						))}
+					</VStack>
 				</PanelBody>
 
-				<PanelBody title="Accordion Color" initialOpen={false}>
-					{bgColorControl.map(({ label, attribute }) => (
-						<div key={attribute}>
-							<p>
-								<strong>{label}</strong>
-							</p>
-							<ColorPalette
-								colors={themeColors}
-								enableAlpha={true}
-								value={backgroundColor?.[attribute]}
-								onChange={(newColor) =>
-									setAttributes({
-										backgroundColor: {
-											...backgroundColor,
-											[attribute]: newColor,
-										},
-									})
-								}
-							/>
-						</div>
-					))}
-
-					{textColorControl.map(({ label, attribute }) => (
-						<div key={attribute}>
-							<p>
-								<strong>{label}</strong>
-							</p>
-							<ColorPalette
-								value={textColor?.[attribute]}
-								colors={themeColors}
-								enableAlpha={true}
-								onChange={(newColor) =>
-									setAttributes({
-										textColor: {
-											...textColor,
-											[attribute]: newColor,
-										},
-									})
-								}
-							/>
-						</div>
-					))}
+				<PanelBody title="Text Color" initialOpen={false}>
+					<VStack>
+						{textColorControl.map(({ label, attribute }) => (
+							<VStack key={attribute}>
+								<Text upperCase>{label}</Text>
+								<ColorPalette
+									value={textColor?.[attribute]}
+									colors={themeColors}
+									enableAlpha={true}
+									disableCustomColors={true}
+									onChange={(newColor) =>
+										setAttributes({
+											textColor: {
+												...textColor,
+												[attribute]: newColor,
+											},
+										})
+									}
+								/>
+							</VStack>
+						))}
+					</VStack>
 				</PanelBody>
 
-				<PanelBody title="Accordion Spacing" initialOpen={false}>
-					<BoxControl
-						__next40pxDefaultSize
-						label="Padding"
-						values={padding}
-						onChange={(newValues) => setAttributes({ padding: newValues })}
-					/>
-					<InputControl
-						__next40pxDefaultSize
-						label="Item Gap"
-						value={parseInt(gap || 24)}
-						onChange={(val) => setAttributes({ gap: `${val}px` })}
-						min={0}
-						max={50}
-					/>
-					<InputControl
-						__next40pxDefaultSize
-						label="Content Spacing"
-						value={parseInt(contentSpacing || 8)}
-						onChange={(val) => setAttributes({ contentSpacing: `${val}px` })}
-						min={0}
-						max={50}
-					/>
-					<BoxControl
-						__next40pxDefaultSize
-						label="Border Radius"
-						values={borderRadius}
-						onChange={(newValues) => setAttributes({ borderRadius: newValues })}
-					/>
-				</PanelBody>
+				<PanelBody title="Spacing" initialOpen={false}>
+					<VStack direction="column">
+						<BoxControl
+							__next40pxDefaultSize
+							label="Padding"
+							values={padding}
+							onChange={(newValues) => setAttributes({ padding: newValues })}
+						/>
+						<UnitControl
+							__next40pxDefaultSize
+							label="Gap"
+							value={gap}
+							onChange={(newValue) => setAttributes({ gap: newValue })}
+						/>
 
-				<PanelBody title="Accordion Icon" initialOpen={false}>
-					<RadioControl
-						label="Icon Type"
-						selected={iconType}
-						onChange={(value) => setAttributes({ iconType: value })}
-						options={[
-							{ label: "Custom Icons", value: "custom" },
-							{ label: "Default Icons", value: "default" },
-						]}
-					/>
-					{iconType === "custom" ? (
-						<div className="media-lib-selector">
-							<h3>Custom Icons</h3>
-							{customAccordionIconControl.map(
-								({ title, attributeId, attributeUrl }) => (
-									<div className="select-open-icon" key={title}>
-										<h4>{title}</h4>
-										<MediaUpload
-											title="Select Image"
-											allowedTypes={[
-												"image/jpeg",
-												"image/png",
-												"image/webp",
-												"image/svg+xml",
-											]}
-											value={customAccordionIcons?.[attributeId]}
-											onSelect={(newImage) =>
-												setAttributes({
-													customAccordionIcons: {
-														...customAccordionIcons,
-														[attributeId]: newImage.id,
-														[attributeUrl]: newImage.url,
-													},
-												})
-											}
-											render={({ open }) => {
-												if (0 == customAccordionIcons?.[attributeId]) {
-													return (
-														<Button
-															className="components-button is-primary"
-															onClick={open}
-														>
-															Select
-														</Button>
-													);
-												} else {
-													return (
-														<div>
-															<img
-																src={customAccordionIcons?.[attributeUrl]}
-																style={{
-																	aspectRatio: "16/9",
-																	objectFit: "contain",
-																}}
-																onClick={open}
-															/>
-															<Button
-																className="components-button is-secondary"
-																onClick={() =>
-																	setAttributes({
-																		customAccordionIcons: {
-																			...customAccordionIcons,
-																			[attributeId]: 0,
-																			[attributeUrl]: "",
-																		},
-																	})
-																}
-															>
-																Delete
-															</Button>
-														</div>
-													);
+						<UnitControl
+							__next40pxDefaultSize
+							label="Content Gap"
+							value={contentSpacing}
+							onChange={(newValue) =>
+								setAttributes({ contentSpacing: newValue })
+							}
+						/>
+						<BoxControl
+							__next40pxDefaultSize
+							label="Border Radius"
+							values={borderRadius}
+							onChange={(newValues) =>
+								setAttributes({ borderRadius: newValues })
+							}
+						/>
+					</VStack>
+				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="settings">
+				<PanelBody title="Icon" initialOpen={false}>
+					<VStack direction="column">
+						<RadioControl
+							label="Icon Type"
+							selected={iconType}
+							onChange={(value) => setAttributes({ iconType: value })}
+							options={[
+								{ label: "Custom Icons", value: "custom" },
+								{ label: "Default Icons", value: "default" },
+							]}
+						/>
+						{iconType === "custom" ? (
+							<VStack className="media-lib-selector">
+								<Text upperCase>Custom Icons</Text>
+								{customAccordionIconControl.map(
+									({ title, attributeId, attributeUrl }) => (
+										<VStack className="select-open-icon" key={title}>
+											<Text>{title}</Text>
+											<MediaUpload
+												title="Select Image"
+												allowedTypes={[
+													"image/jpeg",
+													"image/png",
+													"image/webp",
+													"image/svg+xml",
+												]}
+												value={customAccordionIcons?.[attributeId]}
+												onSelect={(newImage) =>
+													setAttributes({
+														customAccordionIcons: {
+															...customAccordionIcons,
+															[attributeId]: newImage.id,
+															[attributeUrl]: newImage.url,
+														},
+													})
 												}
-											}}
-										/>
-									</div>
-								),
-							)}
-						</div>
-					) : (
-						<div className="accordion-icons">
-							<h3>Default Icons</h3>
-							{defaultAccordionIconControl.map(({ title, attributeId }) => (
-								<div className="open-icon" key={title + attributeId}>
-									<h4>{title}</h4>
-									{Icons.map(({ id, svg }) => (
-										<Button
-											key={id}
-											className={`components-button is-${
-												defaultAccordionIcons?.[attributeId] === id
-													? "primary"
-													: "secondary"
-											}`}
-											onClick={() =>
-												setAttributes({
-													defaultAccordionIcons: {
-														...defaultAccordionIcons,
-														[attributeId]: id,
-													},
-												})
-											}
-										>
-											<span dangerouslySetInnerHTML={{ __html: svg }} />
-										</Button>
-									))}
-								</div>
-							))}
-						</div>
-					)}
-
+												render={({ open }) => {
+													if (0 == customAccordionIcons?.[attributeId]) {
+														return (
+															<Button
+																className="components-button is-primary"
+																onClick={open}
+																text="Select"
+															/>
+														);
+													} else {
+														return (
+															<VStack direction="column">
+																<img
+																	src={customAccordionIcons?.[attributeUrl]}
+																	style={{
+																		aspectRatio: "16/9",
+																		objectFit: "contain",
+																	}}
+																	onClick={open}
+																/>
+																<Button
+																	className="components-button is-secondary"
+																	text="Delete"
+																	onClick={() =>
+																		setAttributes({
+																			customAccordionIcons: {
+																				...customAccordionIcons,
+																				[attributeId]: 0,
+																				[attributeUrl]: "",
+																			},
+																		})
+																	}
+																/>
+															</VStack>
+														);
+													}
+												}}
+											/>
+										</VStack>
+									),
+								)}
+							</VStack>
+						) : (
+							<VStack className="accordion-icons" direction="column">
+								<Text upperCase>Default Icons</Text>
+								{defaultAccordionIconControl.map(({ title, attributeId }) => (
+									<VStack
+										direction="column"
+										className="open-icon"
+										key={title + attributeId}
+									>
+										<Text>{title}</Text>
+										<Flex direction="row" wrap={true} gap="2">
+											{Icons.map(({ id, svg }) => (
+												<Button
+													key={id}
+													className={`components-button is-${
+														defaultAccordionIcons?.[attributeId] === id
+															? "primary"
+															: "secondary"
+													}`}
+													onClick={() =>
+														setAttributes({
+															defaultAccordionIcons: {
+																...defaultAccordionIcons,
+																[attributeId]: id,
+															},
+														})
+													}
+												>
+													<span dangerouslySetInnerHTML={{ __html: svg }} />
+												</Button>
+											))}
+										</Flex>
+									</VStack>
+								))}
+							</VStack>
+						)}
+					</VStack>
+				</PanelBody>
+			</InspectorControls>
+			<InspectorControls group="styles">
+				<PanelBody title="Default Icon Color" initialOpen={false}>
 					{iconColorControl.map(({ label, attribute }) => (
-						<div key={attribute}>
-							<p>
-								<strong>{label}</strong>
-							</p>
+						<VStack key={attribute}>
+							<Text>{label}</Text>
 							<ColorPalette
 								colors={themeColors}
-								enableAlpha={true}
+								enableAlpha
 								value={iconColor?.[attribute]}
+								disableCustomColors={true}
 								onChange={(newColor) =>
 									setAttributes({
 										iconColor: {
@@ -329,7 +356,30 @@ export default function Edit({ attributes, setAttributes }) {
 									})
 								}
 							/>
-						</div>
+						</VStack>
+					))}
+				</PanelBody>
+			</InspectorControls>
+
+			<InspectorControls group="styles">
+				<PanelBody title="Text Size" initialOpen={false}>
+					{fontSizeControl.map(({ label, attribute }) => (
+						<VStack key={attribute}>
+							<Text>{label}</Text>
+							<FontSizePicker
+								__next40pxDefaultSize
+								value={fontSize?.[attribute]}
+								onChange={(newSize) =>
+									setAttributes({
+										fontSize: {
+											...fontSize,
+											[attribute]: newSize,
+										},
+									})
+								}
+								withSlider
+							/>
+						</VStack>
 					))}
 				</PanelBody>
 			</InspectorControls>

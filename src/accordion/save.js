@@ -25,6 +25,7 @@ export default function save({ attributes }) {
 		borderRadius,
 		iconColor,
 		multiple,
+		fontSize,
 	} = attributes;
 
 	const blockProps = useBlockProps.save({
@@ -33,8 +34,8 @@ export default function save({ attributes }) {
 			"--accordion-active-bg": backgroundColor.activeBgColor,
 			"--accordion-header-bg": backgroundColor.headerBgColor,
 			"--accordion-content-bg": backgroundColor.contentBgColor,
-			"--accordion-header-color": textColor.headerColor,
-			"--accordion-active-header-color": textColor.activeHeaderColor,
+			"--accordion-header-color": textColor.headingColor,
+			"--accordion-active-header-color": textColor.activeHeadingColor,
 			"--accordion-content-color": textColor.contentColor,
 			"--accordion-gap": gap,
 			"--accordion-padding-top": padding.top,
@@ -48,6 +49,8 @@ export default function save({ attributes }) {
 			"--accordion-radius-left": borderRadius.left,
 			"--accordion-icon-fill-color": iconColor.fill,
 			"--accordion-icon-stroke-color": iconColor.stroke,
+			"--accordion-heading-fontsize": fontSize?.heading,
+			"--accordion-content-fontsize": fontSize?.content,
 		},
 		"data-multiple": multiple,
 	});

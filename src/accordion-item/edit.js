@@ -73,18 +73,17 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		}
 
 		if (iconType !== iconTypeContext) {
-			setAttributes({ iconType: iconTypeContext });
+			setAttributes({
+				iconType: iconTypeContext,
+			});
 		}
 
-		if (iconType === "custom") {
+		if (iconTypeContext === "custom") {
 			openUrl = customIconContext.openUrl;
 			closeUrl = customIconContext.closeUrl;
 		} else {
-			const openId = defaultIconContext.openId;
-			const closeId = defaultIconContext.closeId;
-
-			openUrl = Icons.find((i) => i.id === openId)?.svg;
-			closeUrl = Icons.find((i) => i.id === closeId)?.svg;
+			openUrl = Icons.find((i) => i.id === defaultIconContext.openId)?.svg;
+			closeUrl = Icons.find((i) => i.id === defaultIconContext.closeId)?.svg;
 		}
 
 		if (
@@ -106,8 +105,6 @@ export default function Edit({ attributes, setAttributes, context, clientId }) {
 		defaultIconContext.closeId,
 		customIconContext.openUrl,
 		customIconContext.closeUrl,
-		accordionIcon.openUrl,
-		accordionIcon.closeUrl,
 	]);
 
 	const innerBlockProps = useInnerBlocksProps({
