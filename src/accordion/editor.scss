@@ -56,20 +56,30 @@
 	.open-icon,
 	.close-icon {
 		button {
+			padding: 8px;
+
 			span {
 				width: 24px;
 				height: 24px;
 
 				svg {
 					> path {
-						fill: var(--accordion-icon-fill-color, #000000);
+						fill: #000000;
 					}
 					> path[stroke] {
 						fill: none;
-						stroke: var(--accordion-icon-stroke-color, #000000);
+						stroke: #000000;
+					}
+					> circle[stroke] {
+						fill: none;
+						stroke: #000000;
 					}
 				}
 			}
 		}
 	}
+}
+
+.components-popover__content {
+	padding: 16px;
 }

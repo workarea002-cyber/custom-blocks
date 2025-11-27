@@ -36,10 +36,10 @@
 				box-shadow: none;
 				text-align: inherit;
 
-				padding: var(--accordion-padding-top, 16px)
-					var(--accordion-padding-right, 16px)
-					var(--accordion-padding-bottom, 16px)
-					var(--accordion-padding-left, 16px);
+				padding: var(--accordion-headerPadding-top, 16px)
+					var(--accordion-headerPadding-right, 16px)
+					var(--accordion-headerPadding-bottom, 16px)
+					var(--accordion-headerPadding-left, 16px);
 
 				.heading {
 					display: block;
@@ -62,11 +62,15 @@
 
 						svg {
 							> path {
-								fill: var(--accordion-icon-fill-color, #000000);
+								fill: var(--accordion-icon-color, #000000);
 							}
 							> path[stroke] {
 								fill: none;
-								stroke: var(--accordion-icon-stroke-color, #000000);
+								stroke: var(--accordion-icon-color, #000000);
+							}
+							> circle[stroke] {
+								fill: none;
+								stroke: var(--accordion-icon-color, #000000);
 							}
 						}
 					}
@@ -95,10 +99,10 @@
 				font-size: var(--accordion-content-fontsize);
 				color: inherit;
 				background-color: inherit;
-				padding: var(--accordion-padding-top, 16px)
-					var(--accordion-padding-right, 16px)
-					var(--accordion-padding-bottom, 16px)
-					var(--accordion-padding-left, 16px);
+				padding: var(--accordion-contentPadding-top, 16px)
+					var(--accordion-contentPadding-right, 16px)
+					var(--accordion-contentPadding-bottom, 16px)
+					var(--accordion-contentPadding-left, 16px);
 			}
 
 			.inner-wrapper > * {

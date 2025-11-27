@@ -38,7 +38,16 @@
 				"contentBgColor": ""
 			}
 		},
-		"padding": {
+		"headerPadding": {
+			"type": "object",
+			"default": {
+				"top": "16px",
+				"right": "16px",
+				"bottom": "16px",
+				"left": "16px"
+			}
+		},
+		"contentPadding": {
 			"type": "object",
 			"default": {
 				"top": "16px",
@@ -76,8 +85,8 @@
 		"defaultAccordionIcons": {
 			"type": "object",
 			"default": {
-				"openId": 4,
-				"closeId": 1
+				"openId": 2,
+				"closeId": 7
 			}
 		},
 		"iconType": {
@@ -85,11 +94,8 @@
 			"default": "default"
 		},
 		"iconColor": {
-			"type": "object",
-			"default": {
-				"fill": "#000000",
-				"stroke": "#000000"
-			}
+			"type": "string",
+			"default": "#000000"
 		},
 		"multiple": {
 			"type": "boolean",
@@ -111,22 +117,13 @@
 			"width": true,
 			"style": true
 		},
-		"color": {
-			"gradients": true,
-			"__experimentalDefaultControls": {
-				"background": true,
-				"text": true
-			}
-		},
 		"spacing": {
 			"padding": true,
 			"margin": true,
-			"blockGap": true,
 			"units": ["px", "em", "rem", "vh", "vw"],
 			"__experimentalDefaultControls": {
-				"margin": false,
-				"padding": false,
-				"blockGap": true
+				"margin": true,
+				"padding": true
 			}
 		},
 		"__experimentalBorder": {

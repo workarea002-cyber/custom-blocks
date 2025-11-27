@@ -30,7 +30,6 @@ import {
 	Icons,
 	bgColorControl,
 	fontSizeControl,
-	iconColorControl,
 	textColorControl,
 	customAccordionIconControl,
 	defaultAccordionIconControl,
@@ -39,17 +38,20 @@ import {
 import {
 	Flex,
 	Button,
+	Popover,
 	PanelBody,
-	ColorPalette,
 	BoxControl,
 	RadioControl,
+	ColorPalette,
 	SelectControl,
 	ToggleControl,
+	ColorIndicator,
 	FontSizePicker,
 	__experimentalText as Text,
 	__experimentalVStack as VStack,
 	__experimentalUnitControl as UnitControl,
 } from "@wordpress/components";
+import { useState } from "react";
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -64,7 +66,8 @@ export default function Edit({ attributes, setAttributes }) {
 		textColor,
 		backgroundColor,
 		gap,
-		padding,
+		headerPadding,
+		contentPadding,
 		contentSpacing,
 		borderRadius,
 		allowedBlocks,
@@ -88,22 +91,30 @@ export default function Edit({ attributes, setAttributes }) {
 			"--accordion-active-header-color": textColor.activeHeadingColor,
 			"--accordion-content-color": textColor.contentColor,
 			"--accordion-gap": gap,
-			"--accordion-padding-top": padding.top,
-			"--accordion-padding-right": padding.right,
-			"--accordion-padding-bottom": padding.bottom,
-			"--accordion-padding-left": padding.left,
+			"--accordion-headerPadding-top": headerPadding.top,
+			"--accordion-headerPadding-right": headerPadding.right,
+			"--accordion-headerPadding-bottom": headerPadding.bottom,
+			"--accordion-headerPadding-left": headerPadding.left,
+			"--accordion-contentPadding-top": contentPadding.top,
+			"--accordion-contentPadding-right": contentPadding.right,
+			"--accordion-contentPadding-bottom": contentPadding.bottom,
+			"--accordion-contentPadding-left": contentPadding.left,
 			"--accordion-content-spacing": contentSpacing,
 			"--accordion-radius-top": borderRadius.top,
 			"--accordion-radius-right": borderRadius.right,
 			"--accordion-radius-bottom": borderRadius.bottom,
 			"--accordion-radius-left": borderRadius.left,
-			"--accordion-icon-fill-color": iconColor.fill,
-			"--accordion-icon-stroke-color": iconColor.stroke,
+			"--accordion-icon-color": iconColor,
 			"--accordion-heading-fontsize": fontSize?.heading,
 			"--accordion-content-fontsize": fontSize?.content,
 		},
 		"data-multiple": multiple,
 	});
+
+	const [isVisible, setIsVisible] = useState(null);
+	const toggleVisible = (label) => {
+		setIsVisible((prev) => (prev === label ? null : label));
+	};
 
 	return (
 		<>
@@ -138,49 +149,77 @@ export default function Edit({ attributes, setAttributes }) {
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title="Background Color" initialOpen={false}>
-					<VStack>
+					<VStack direction="column">
 						{bgColorControl.map(({ label, attribute }) => (
-							<VStack key={attribute}>
-								<Text upperCase>{label}</Text>
-								<ColorPalette
-									colors={themeColors}
-									enableAlpha={true}
-									value={backgroundColor?.[attribute]}
-									disableCustomColors={true}
-									onChange={(newColor) =>
-										setAttributes({
-											backgroundColor: {
-												...backgroundColor,
-												[attribute]: newColor,
-											},
-										})
-									}
-								/>
-							</VStack>
+							<Button
+								key={attribute}
+								variant="secondary"
+								onClick={() => toggleVisible(label)}
+							>
+								<VStack direction="row">
+									<ColorIndicator colorValue={backgroundColor?.[attribute]} />
+									<Text>{label}</Text>
+								</VStack>
+								{isVisible === label && (
+									<Popover placement="left-end" offset={20}>
+										<VStack direction="column">
+											<Text>Theme Colors</Text>
+											<ColorPalette
+												colors={themeColors}
+												enableAlpha={true}
+												value={backgroundColor?.[attribute]}
+												disableCustomColors={true}
+												onChange={(newColor) =>
+													setAttributes({
+														backgroundColor: {
+															...backgroundColor,
+															[attribute]: newColor,
+														},
+													})
+												}
+											/>
+										</VStack>
+									</Popover>
+								)}
+							</Button>
 						))}
 					</VStack>
 				</PanelBody>
 
 				<PanelBody title="Text Color" initialOpen={false}>
-					<VStack>
+					<VStack direction="column">
 						{textColorControl.map(({ label, attribute }) => (
-							<VStack key={attribute}>
-								<Text upperCase>{label}</Text>
-								<ColorPalette
-									value={textColor?.[attribute]}
-									colors={themeColors}
-									enableAlpha={true}
-									disableCustomColors={true}
-									onChange={(newColor) =>
-										setAttributes({
-											textColor: {
-												...textColor,
-												[attribute]: newColor,
-											},
-										})
-									}
-								/>
-							</VStack>
+							<Button
+								key={attribute}
+								variant="secondary"
+								onClick={() => toggleVisible(label)}
+							>
+								<VStack direction="row">
+									<ColorIndicator colorValue={textColor?.[attribute]} />
+									<Text>{label}</Text>
+								</VStack>
+								{isVisible === label && (
+									<Popover placement="left-end" offset={20}>
+										<VStack direction="column">
+											<Text>Theme Colors</Text>
+											<ColorPalette
+												colors={themeColors}
+												enableAlpha={true}
+												value={textColor?.[attribute]}
+												disableCustomColors={true}
+												onChange={(newColor) =>
+													setAttributes({
+														textColor: {
+															...textColor,
+															[attribute]: newColor,
+														},
+													})
+												}
+											/>
+										</VStack>
+									</Popover>
+								)}
+							</Button>
 						))}
 					</VStack>
 				</PanelBody>
@@ -189,9 +228,19 @@ export default function Edit({ attributes, setAttributes }) {
 					<VStack direction="column">
 						<BoxControl
 							__next40pxDefaultSize
-							label="Padding"
-							values={padding}
-							onChange={(newValues) => setAttributes({ padding: newValues })}
+							label="Header Padding"
+							values={headerPadding}
+							onChange={(newValues) =>
+								setAttributes({ headerPadding: newValues })
+							}
+						/>
+						<BoxControl
+							__next40pxDefaultSize
+							label="Content Padding"
+							values={contentPadding}
+							onChange={(newValues) =>
+								setAttributes({ contentPadding: newValues })
+							}
 						/>
 						<UnitControl
 							__next40pxDefaultSize
@@ -309,7 +358,7 @@ export default function Edit({ attributes, setAttributes }) {
 									>
 										<Text>{title}</Text>
 										<Flex direction="row" wrap={true} gap="2">
-											{Icons.map(({ id, svg }) => (
+											{Icons.map(({ id, label, svg }) => (
 												<Button
 													key={id}
 													className={`components-button is-${
@@ -317,6 +366,7 @@ export default function Edit({ attributes, setAttributes }) {
 															? "primary"
 															: "secondary"
 													}`}
+													title={label}
 													onClick={() =>
 														setAttributes({
 															defaultAccordionIcons: {
@@ -339,25 +389,20 @@ export default function Edit({ attributes, setAttributes }) {
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelBody title="Default Icon Color" initialOpen={false}>
-					{iconColorControl.map(({ label, attribute }) => (
-						<VStack key={attribute}>
-							<Text>{label}</Text>
-							<ColorPalette
-								colors={themeColors}
-								enableAlpha
-								value={iconColor?.[attribute]}
-								disableCustomColors={true}
-								onChange={(newColor) =>
-									setAttributes({
-										iconColor: {
-											...iconColor,
-											[attribute]: newColor,
-										},
-									})
-								}
-							/>
-						</VStack>
-					))}
+					<VStack>
+						<Text>Icon Color</Text>
+						<ColorPalette
+							colors={themeColors}
+							enableAlpha
+							value={iconColor}
+							disableCustomColors={true}
+							onChange={(newColor) =>
+								setAttributes({
+									iconColor: newColor,
+								})
+							}
+						/>
+					</VStack>
 				</PanelBody>
 			</InspectorControls>
 
