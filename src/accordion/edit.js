@@ -33,6 +33,9 @@ import {
 	textColorControl,
 	customAccordionIconControl,
 	defaultAccordionIconControl,
+	paddingControl,
+	blockGapControl,
+	iconColorControl,
 } from "./constants";
 
 import {
@@ -41,6 +44,7 @@ import {
 	Popover,
 	PanelBody,
 	BoxControl,
+	TextControl,
 	RadioControl,
 	ColorPalette,
 	SelectControl,
@@ -65,7 +69,7 @@ export default function Edit({ attributes, setAttributes }) {
 	const {
 		textColor,
 		backgroundColor,
-		gap,
+		accordionGap,
 		headerPadding,
 		contentPadding,
 		contentSpacing,
@@ -78,35 +82,55 @@ export default function Edit({ attributes, setAttributes }) {
 		iconColor,
 		multiple,
 		fontSize,
+		iconSize,
 	} = attributes;
 
 	const [themeColors] = useSettings("color.palette");
 	const blockProps = useBlockProps({
 		style: {
+			// Background Color
 			"--accordion-bg": backgroundColor.bgColor,
 			"--accordion-active-bg": backgroundColor.activeBgColor,
 			"--accordion-header-bg": backgroundColor.headerBgColor,
 			"--accordion-content-bg": backgroundColor.contentBgColor,
+
+			// Text Color
 			"--accordion-header-color": textColor.headingColor,
 			"--accordion-active-header-color": textColor.activeHeadingColor,
 			"--accordion-content-color": textColor.contentColor,
-			"--accordion-gap": gap,
+
+			// Spacing
+			"--accordion-gap": accordionGap,
+			"--accordion-content-spacing": contentSpacing,
+
+			// Padding
 			"--accordion-headerPadding-top": headerPadding.top,
 			"--accordion-headerPadding-right": headerPadding.right,
 			"--accordion-headerPadding-bottom": headerPadding.bottom,
 			"--accordion-headerPadding-left": headerPadding.left,
+
 			"--accordion-contentPadding-top": contentPadding.top,
 			"--accordion-contentPadding-right": contentPadding.right,
 			"--accordion-contentPadding-bottom": contentPadding.bottom,
 			"--accordion-contentPadding-left": contentPadding.left,
-			"--accordion-content-spacing": contentSpacing,
+
+			// Border
 			"--accordion-radius-top": borderRadius.top,
 			"--accordion-radius-right": borderRadius.right,
 			"--accordion-radius-bottom": borderRadius.bottom,
 			"--accordion-radius-left": borderRadius.left,
-			"--accordion-icon-color": iconColor,
-			"--accordion-heading-fontsize": fontSize?.heading,
-			"--accordion-content-fontsize": fontSize?.content,
+
+			// Icon
+			"--accordion-icon-size": iconSize,
+			"--accordion-icon-color": iconColor.normal,
+			"--accordion-icon-active-color": iconColor.active,
+
+			// Font
+			"--accordion-heading-fontsize": fontSize.heading,
+			"--accordion-heading-fontweight": fontSize.headingWeight,
+			"--accordion-heading-lineheight": fontSize.headerLineHeight,
+			"--accordion-heading-letterspacing": fontSize.headerLetterSpacing,
+			"--accordion-content-fontsize": fontSize.content,
 		},
 		"data-multiple": multiple,
 	});
@@ -146,129 +170,7 @@ export default function Edit({ attributes, setAttributes }) {
 						/>
 					</VStack>
 				</PanelBody>
-			</InspectorControls>
-			<InspectorControls group="styles">
-				<PanelBody title="Background Color" initialOpen={false}>
-					<VStack direction="column">
-						{bgColorControl.map(({ label, attribute }) => (
-							<Button
-								key={attribute}
-								variant="secondary"
-								onClick={() => toggleVisible(label)}
-							>
-								<VStack direction="row">
-									<ColorIndicator colorValue={backgroundColor?.[attribute]} />
-									<Text>{label}</Text>
-								</VStack>
-								{isVisible === label && (
-									<Popover placement="left-end" offset={20}>
-										<VStack direction="column">
-											<Text>Theme Colors</Text>
-											<ColorPalette
-												colors={themeColors}
-												enableAlpha={true}
-												value={backgroundColor?.[attribute]}
-												disableCustomColors={true}
-												onChange={(newColor) =>
-													setAttributes({
-														backgroundColor: {
-															...backgroundColor,
-															[attribute]: newColor,
-														},
-													})
-												}
-											/>
-										</VStack>
-									</Popover>
-								)}
-							</Button>
-						))}
-					</VStack>
-				</PanelBody>
 
-				<PanelBody title="Text Color" initialOpen={false}>
-					<VStack direction="column">
-						{textColorControl.map(({ label, attribute }) => (
-							<Button
-								key={attribute}
-								variant="secondary"
-								onClick={() => toggleVisible(label)}
-							>
-								<VStack direction="row">
-									<ColorIndicator colorValue={textColor?.[attribute]} />
-									<Text>{label}</Text>
-								</VStack>
-								{isVisible === label && (
-									<Popover placement="left-end" offset={20}>
-										<VStack direction="column">
-											<Text>Theme Colors</Text>
-											<ColorPalette
-												colors={themeColors}
-												enableAlpha={true}
-												value={textColor?.[attribute]}
-												disableCustomColors={true}
-												onChange={(newColor) =>
-													setAttributes({
-														textColor: {
-															...textColor,
-															[attribute]: newColor,
-														},
-													})
-												}
-											/>
-										</VStack>
-									</Popover>
-								)}
-							</Button>
-						))}
-					</VStack>
-				</PanelBody>
-
-				<PanelBody title="Spacing" initialOpen={false}>
-					<VStack direction="column">
-						<BoxControl
-							__next40pxDefaultSize
-							label="Header Padding"
-							values={headerPadding}
-							onChange={(newValues) =>
-								setAttributes({ headerPadding: newValues })
-							}
-						/>
-						<BoxControl
-							__next40pxDefaultSize
-							label="Content Padding"
-							values={contentPadding}
-							onChange={(newValues) =>
-								setAttributes({ contentPadding: newValues })
-							}
-						/>
-						<UnitControl
-							__next40pxDefaultSize
-							label="Gap"
-							value={gap}
-							onChange={(newValue) => setAttributes({ gap: newValue })}
-						/>
-
-						<UnitControl
-							__next40pxDefaultSize
-							label="Content Gap"
-							value={contentSpacing}
-							onChange={(newValue) =>
-								setAttributes({ contentSpacing: newValue })
-							}
-						/>
-						<BoxControl
-							__next40pxDefaultSize
-							label="Border Radius"
-							values={borderRadius}
-							onChange={(newValues) =>
-								setAttributes({ borderRadius: newValues })
-							}
-						/>
-					</VStack>
-				</PanelBody>
-			</InspectorControls>
-			<InspectorControls group="settings">
 				<PanelBody title="Icon" initialOpen={false}>
 					<VStack direction="column">
 						<RadioControl
@@ -387,45 +289,247 @@ export default function Edit({ attributes, setAttributes }) {
 					</VStack>
 				</PanelBody>
 			</InspectorControls>
+
 			<InspectorControls group="styles">
-				<PanelBody title="Default Icon Color" initialOpen={false}>
-					<VStack>
-						<Text>Icon Color</Text>
-						<ColorPalette
-							colors={themeColors}
-							enableAlpha
-							value={iconColor}
-							disableCustomColors={true}
-							onChange={(newColor) =>
-								setAttributes({
-									iconColor: newColor,
-								})
+				<PanelBody title="Background Color" initialOpen={false}>
+					<VStack direction="column">
+						{bgColorControl.map(({ label, attribute }) => (
+							<Button
+								key={attribute}
+								variant="secondary"
+								onClick={() => toggleVisible(label)}
+							>
+								<VStack direction="row">
+									<ColorIndicator colorValue={backgroundColor?.[attribute]} />
+									<Text>{label}</Text>
+								</VStack>
+								{isVisible === label && (
+									<Popover placement="left-end" offset={20}>
+										<VStack direction="column">
+											<Text>Theme Colors</Text>
+											<ColorPalette
+												colors={themeColors}
+												enableAlpha={true}
+												value={backgroundColor?.[attribute]}
+												disableCustomColors={true}
+												onChange={(newColor) =>
+													setAttributes({
+														backgroundColor: {
+															...backgroundColor,
+															[attribute]: newColor,
+														},
+													})
+												}
+											/>
+										</VStack>
+									</Popover>
+								)}
+							</Button>
+						))}
+					</VStack>
+				</PanelBody>
+
+				<PanelBody title="Text Color" initialOpen={false}>
+					<VStack direction="column">
+						{textColorControl.map(({ label, attribute }) => (
+							<Button
+								key={attribute}
+								variant="secondary"
+								onClick={() => toggleVisible(label)}
+							>
+								<VStack direction="row">
+									<ColorIndicator colorValue={textColor?.[attribute]} />
+									<Text>{label}</Text>
+								</VStack>
+								{isVisible === label && (
+									<Popover placement="left-end" offset={20}>
+										<VStack direction="column">
+											<Text>Theme Colors</Text>
+											<ColorPalette
+												colors={themeColors}
+												enableAlpha={true}
+												value={textColor?.[attribute]}
+												disableCustomColors={true}
+												onChange={(newColor) =>
+													setAttributes({
+														textColor: {
+															...textColor,
+															[attribute]: newColor,
+														},
+													})
+												}
+											/>
+										</VStack>
+									</Popover>
+								)}
+							</Button>
+						))}
+					</VStack>
+				</PanelBody>
+
+				<PanelBody title="Icon Color" initialOpen={false}>
+					<VStack direction="column">
+						<UnitControl
+							__next40pxDefaultSize
+							label="Size"
+							value={iconSize}
+							onChange={(newValue) => setAttributes({ iconSize: newValue })}
+						/>
+
+						{iconColorControl.map(({ label, attribute }) => (
+							<VStack direction="column">
+								<Text>{label}</Text>
+								<ColorPalette
+									colors={themeColors}
+									enableAlpha
+									value={iconColor?.[attribute]}
+									disableCustomColors={true}
+									onChange={(newColor) =>
+										setAttributes({
+											iconColor: {
+												...iconColor,
+												[attribute]: newColor,
+											},
+										})
+									}
+								/>
+							</VStack>
+						))}
+					</VStack>
+				</PanelBody>
+
+				<PanelBody title="Accordion Item Spacing" initialOpen={false}>
+					<VStack direction="column">
+						{paddingControl.map(({ label, attribute }) => (
+							<BoxControl
+								key={label}
+								__next40pxDefaultSize
+								label={label}
+								values={attributes[attribute]}
+								onChange={(newValues) =>
+									setAttributes({ [attribute]: newValues })
+								}
+							/>
+						))}
+
+						{blockGapControl.map(({ label, attribute }) => (
+							<UnitControl
+								key={label}
+								__next40pxDefaultSize
+								label={label}
+								value={attributes[attribute]}
+								onChange={(newValues) =>
+									setAttributes({ [attribute]: newValues })
+								}
+							/>
+						))}
+
+						<BoxControl
+							__next40pxDefaultSize
+							label="Border Radius"
+							values={borderRadius}
+							onChange={(newValues) =>
+								setAttributes({ borderRadius: newValues })
 							}
 						/>
 					</VStack>
 				</PanelBody>
-			</InspectorControls>
 
-			<InspectorControls group="styles">
-				<PanelBody title="Text Size" initialOpen={false}>
-					{fontSizeControl.map(({ label, attribute }) => (
-						<VStack key={attribute}>
-							<Text>{label}</Text>
+				<PanelBody title="Typography" initialOpen={false}>
+					<Flex gap="6" direction="column">
+						<VStack direction="column">
+							<Text>Heading Styles</Text>
 							<FontSizePicker
 								__next40pxDefaultSize
-								value={fontSize?.[attribute]}
+								value={fontSize.heading}
 								onChange={(newSize) =>
 									setAttributes({
 										fontSize: {
 											...fontSize,
-											[attribute]: newSize,
+											heading: newSize,
+										},
+									})
+								}
+								withSlider
+							/>
+
+							<SelectControl
+								label="Font Weight"
+								value={fontSize.headingWeight}
+								options={[
+									{ label: "Default", value: "" },
+									{ label: "100 (Thin)", value: "100" },
+									{ label: "200 (ExtraLight)", value: "200" },
+									{ label: "300 (Light)", value: "300" },
+									{ label: "400 (Normal)", value: "400" },
+									{ label: "500 (Medium)", value: "500" },
+									{ label: "600 (SemiBold)", value: "600" },
+									{ label: "700 (Bold)", value: "700" },
+									{ label: "800 (ExtraBold)", value: "800" },
+									{ label: "900 (Black)", value: "900" },
+								]}
+								onChange={(newTag) =>
+									setAttributes({
+										fontSize: {
+											...fontSize,
+											headingWeight: newTag,
+										},
+									})
+								}
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+							/>
+
+							<TextControl
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label="Line Height"
+								onChange={(newValues) =>
+									setAttributes({
+										fontSize: {
+											...fontSize,
+											headerLineHeight: newValues,
+										},
+									})
+								}
+								placeholder={fontSize.headerLineHeight}
+								value={fontSize.headerLineHeight}
+							/>
+
+							<TextControl
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+								label="Letter Spacing"
+								onChange={(newValues) =>
+									setAttributes({
+										fontSize: {
+											...fontSize,
+											headerLetterSpacing: newValues,
+										},
+									})
+								}
+								placeholder={fontSize.headerLetterSpacing}
+								value={fontSize.headerLetterSpacing}
+							/>
+						</VStack>
+
+						<VStack direction="column">
+							<Text>Content Styles</Text>
+							<FontSizePicker
+								__next40pxDefaultSize
+								value={fontSize.content}
+								onChange={(newSize) =>
+									setAttributes({
+										fontSize: {
+											...fontSize,
+											content: newSize,
 										},
 									})
 								}
 								withSlider
 							/>
 						</VStack>
-					))}
+					</Flex>
 				</PanelBody>
 			</InspectorControls>
 

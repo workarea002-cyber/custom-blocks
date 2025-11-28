@@ -35,6 +35,7 @@
 				color: var(--accordion-header-color);
 				box-shadow: none;
 				text-align: inherit;
+				cursor: pointer;
 
 				padding: var(--accordion-headerPadding-top, 16px)
 					var(--accordion-headerPadding-right, 16px)
@@ -45,6 +46,9 @@
 					display: block;
 					font: inherit;
 					font-size: var(--accordion-heading-fontsize);
+					font-weight: var(--accordion-heading-fontweight);
+					line-height: var(--accordion-heading-lineheight);
+					letter-spacing: var(--accordion-heading-letterspacing, normal);
 				}
 
 				.accordion-icon-wrap {
@@ -57,10 +61,13 @@
 						display: flex;
 						align-items: center;
 						justify-content: center;
-						width: 24px;
-						height: 24px;
+						width: var(--accordion-icon-size);
+						height: var(--accordion-icon-size);
 
 						svg {
+							width: var(--accordion-icon-size);
+							height: var(--accordion-icon-size);
+
 							> path {
 								fill: var(--accordion-icon-color, #000000);
 							}
@@ -119,6 +126,23 @@
 
 			.accordion-trigger {
 				.accordion-icon-wrap {
+					.open-icon,
+					.close-icon {
+						svg {
+							> path {
+								fill: var(--accordion-icon-active-color, #000000);
+							}
+							> path[stroke] {
+								fill: none;
+								stroke: var(--accordion-icon-active-color, #000000);
+							}
+							> circle[stroke] {
+								fill: none;
+								stroke: var(--accordion-icon-active-color, #000000);
+							}
+						}
+					}
+
 					.open-icon {
 						display: none;
 					}

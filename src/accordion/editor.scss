@@ -8,9 +8,6 @@
 			margin: 0;
 
 			.accordion-trigger {
-				font-size: inherit;
-				font-weight: inherit;
-				font-family: inherit;
 				width: 100%;
 				border: none;
 
@@ -19,12 +16,13 @@
 				}
 
 				.accordion-icon-wrap {
+					display: flex;
 					width: auto;
 					height: auto;
 
 					.open-icon,
 					.close-icon {
-						display: block;
+						display: flex;
 					}
 				}
 			}

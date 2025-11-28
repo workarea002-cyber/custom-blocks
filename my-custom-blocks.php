@@ -2,10 +2,10 @@
 /**
  * Plugin Name:       My Custom Blocks
  * Description:       Light-weight custom blocks for website.
- * Version:           2.0.0
+ * Version:           3.2.0
  * Requires at least: 6.7
  * Requires PHP:      7.4
- * Author:            Blank
+ * Author:            Vedang
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       my-custom-blocks

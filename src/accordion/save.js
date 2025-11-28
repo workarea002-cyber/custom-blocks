@@ -19,7 +19,7 @@ export default function save({ attributes }) {
 	const {
 		textColor,
 		backgroundColor,
-		gap,
+		accordionGap,
 		headerPadding,
 		contentPadding,
 		contentSpacing,
@@ -27,34 +27,54 @@ export default function save({ attributes }) {
 		iconColor,
 		multiple,
 		fontSize,
+		iconSize,
 	} = attributes;
 
 	const blockProps = useBlockProps.save({
 		style: {
+			// Background Color
 			"--accordion-bg": backgroundColor.bgColor,
 			"--accordion-active-bg": backgroundColor.activeBgColor,
 			"--accordion-header-bg": backgroundColor.headerBgColor,
 			"--accordion-content-bg": backgroundColor.contentBgColor,
+
+			// Text Color
 			"--accordion-header-color": textColor.headingColor,
 			"--accordion-active-header-color": textColor.activeHeadingColor,
 			"--accordion-content-color": textColor.contentColor,
-			"--accordion-gap": gap,
+
+			// Spacing
+			"--accordion-gap": accordionGap,
+			"--accordion-content-spacing": contentSpacing,
+
+			// Padding
 			"--accordion-headerPadding-top": headerPadding.top,
 			"--accordion-headerPadding-right": headerPadding.right,
 			"--accordion-headerPadding-bottom": headerPadding.bottom,
 			"--accordion-headerPadding-left": headerPadding.left,
+
 			"--accordion-contentPadding-top": contentPadding.top,
 			"--accordion-contentPadding-right": contentPadding.right,
 			"--accordion-contentPadding-bottom": contentPadding.bottom,
 			"--accordion-contentPadding-left": contentPadding.left,
-			"--accordion-content-spacing": contentSpacing,
+
+			// Border
 			"--accordion-radius-top": borderRadius.top,
 			"--accordion-radius-right": borderRadius.right,
 			"--accordion-radius-bottom": borderRadius.bottom,
 			"--accordion-radius-left": borderRadius.left,
-			"--accordion-icon-color": iconColor,
-			"--accordion-heading-fontsize": fontSize?.heading,
-			"--accordion-content-fontsize": fontSize?.content,
+
+			// Icon
+			"--accordion-icon-size": iconSize,
+			"--accordion-icon-color": iconColor.normal,
+			"--accordion-icon-active-color": iconColor.active,
+
+			// Font
+			"--accordion-heading-fontsize": fontSize.heading,
+			"--accordion-heading-fontweight": fontSize.headingWeight,
+			"--accordion-heading-lineheight": fontSize.headerLineHeight,
+			"--accordion-heading-letterspacing": fontSize.headerLetterSpacing,
+			"--accordion-content-fontsize": fontSize.content,
 		},
 		"data-multiple": multiple,
 	});

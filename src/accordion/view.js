@@ -3,6 +3,19 @@ document.addEventListener("DOMContentLoaded", () => {
 		".wp-block-custom-blocks-accordion",
 	);
 
+	// ResizeObserver to adjust height if content changes
+	const ro = new ResizeObserver((entries) => {
+		entries.forEach((entry) => {
+			const content = entry.target;
+			const item = content.closest(".show-text");
+
+			// Only update if this accordion item is open
+			if (item) {
+				content.style.maxHeight = content.scrollHeight + "px";
+			}
+		});
+	});
+
 	accordions.forEach((accordion) => {
 		const multiple = accordion.getAttribute("data-multiple") === "true";
 		const items = accordion.querySelectorAll(
@@ -12,6 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		items.forEach((item, index) => {
 			const trigger = item.querySelector(".accordion-trigger");
 			const content = item.querySelector(".accordion-content");
+
+			// Observe all accordion contents
+			ro.observe(content);
 
 			// first open one
 			if (index === 0) {
