@@ -29,7 +29,6 @@ import "./editor.scss";
 import {
 	Icons,
 	bgColorControl,
-	fontSizeControl,
 	textColorControl,
 	customAccordionIconControl,
 	defaultAccordionIconControl,
@@ -144,7 +143,7 @@ export default function Edit({ attributes, setAttributes }) {
 		<>
 			<InspectorControls group="settings">
 				<PanelBody title="Tag" initialOpen={true}>
-					<VStack>
+					<VStack direction="column" spacing={3}>
 						<SelectControl
 							label="Tag Level"
 							value={headingTag}
@@ -160,6 +159,7 @@ export default function Edit({ attributes, setAttributes }) {
 							__next40pxDefaultSize
 							__nextHasNoMarginBottom
 						/>
+
 						<ToggleControl
 							__nextHasNoMarginBottom
 							label="Multi Open Accordion"
@@ -172,7 +172,7 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody title="Icon" initialOpen={false}>
-					<VStack direction="column">
+					<VStack direction="column" spacing={3}>
 						<RadioControl
 							label="Icon Type"
 							selected={iconType}
@@ -250,40 +250,60 @@ export default function Edit({ attributes, setAttributes }) {
 								)}
 							</VStack>
 						) : (
-							<VStack className="accordion-icons" direction="column">
+							<VStack className="icons-selector" direction="column">
 								<Text upperCase>Default Icons</Text>
-								{defaultAccordionIconControl.map(({ title, attributeId }) => (
-									<VStack
-										direction="column"
-										className="open-icon"
-										key={title + attributeId}
-									>
-										<Text>{title}</Text>
-										<Flex direction="row" wrap={true} gap="2">
-											{Icons.map(({ id, label, svg }) => (
-												<Button
-													key={id}
-													className={`components-button is-${
-														defaultAccordionIcons?.[attributeId] === id
-															? "primary"
-															: "secondary"
-													}`}
-													title={label}
-													onClick={() =>
-														setAttributes({
-															defaultAccordionIcons: {
-																...defaultAccordionIcons,
-																[attributeId]: id,
-															},
-														})
-													}
-												>
-													<span dangerouslySetInnerHTML={{ __html: svg }} />
-												</Button>
-											))}
-										</Flex>
-									</VStack>
-								))}
+								<VStack direction="column">
+									{defaultAccordionIconControl.map(({ title, attributeId }) => (
+										<Button
+											key={title + attributeId}
+											variant="secondary"
+											onClick={() => toggleVisible(title)}
+										>
+											<VStack direction="row">
+												<span
+													className="selected-icon"
+													dangerouslySetInnerHTML={{
+														__html: Icons.find(
+															(i) =>
+																i.id === defaultAccordionIcons?.[attributeId],
+														)?.svg,
+													}}
+												/>
+												<Text>{title}</Text>
+											</VStack>
+											{isVisible === title && (
+												<Popover placement="left-end" offset={20}>
+													<Flex direction="row" wrap={true} gap="2">
+														{Icons.map(({ id, label, svg }) => (
+															<Button
+																key={id}
+																className={`components-button is-${
+																	defaultAccordionIcons?.[attributeId] === id
+																		? "primary"
+																		: "secondary"
+																}`}
+																title={label}
+																onClick={() =>
+																	setAttributes({
+																		defaultAccordionIcons: {
+																			...defaultAccordionIcons,
+																			[attributeId]: id,
+																		},
+																	})
+																}
+															>
+																<span
+																	className="span-svg"
+																	dangerouslySetInnerHTML={{ __html: svg }}
+																/>
+															</Button>
+														))}
+													</Flex>
+												</Popover>
+											)}
+										</Button>
+									))}
+								</VStack>
 							</VStack>
 						)}
 					</VStack>
@@ -399,30 +419,34 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody title="Accordion Item Spacing" initialOpen={false}>
-					<VStack direction="column">
-						{paddingControl.map(({ label, attribute }) => (
-							<BoxControl
-								key={label}
-								__next40pxDefaultSize
-								label={label}
-								values={attributes[attribute]}
-								onChange={(newValues) =>
-									setAttributes({ [attribute]: newValues })
-								}
-							/>
-						))}
+					<VStack direction="column" spacing={6}>
+						<VStack direction="column" spacing={3}>
+							{paddingControl.map(({ label, attribute }) => (
+								<BoxControl
+									key={label}
+									__next40pxDefaultSize
+									label={label}
+									values={attributes[attribute]}
+									onChange={(newValues) =>
+										setAttributes({ [attribute]: newValues })
+									}
+								/>
+							))}
+						</VStack>
 
-						{blockGapControl.map(({ label, attribute }) => (
-							<UnitControl
-								key={label}
-								__next40pxDefaultSize
-								label={label}
-								value={attributes[attribute]}
-								onChange={(newValues) =>
-									setAttributes({ [attribute]: newValues })
-								}
-							/>
-						))}
+						<VStack direction="column" spacing={3}>
+							{blockGapControl.map(({ label, attribute }) => (
+								<UnitControl
+									key={label}
+									__next40pxDefaultSize
+									label={label}
+									value={attributes[attribute]}
+									onChange={(newValues) =>
+										setAttributes({ [attribute]: newValues })
+									}
+								/>
+							))}
+						</VStack>
 
 						<BoxControl
 							__next40pxDefaultSize
@@ -436,8 +460,8 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody title="Typography" initialOpen={false}>
-					<Flex gap="6" direction="column">
-						<VStack direction="column">
+					<VStack spacing="6" direction="column">
+						<VStack direction="column" spacing={3}>
 							<Text>Heading Styles</Text>
 							<FontSizePicker
 								__next40pxDefaultSize
@@ -480,37 +504,48 @@ export default function Edit({ attributes, setAttributes }) {
 								__nextHasNoMarginBottom
 							/>
 
-							<TextControl
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
-								label="Line Height"
-								onChange={(newValues) =>
-									setAttributes({
-										fontSize: {
-											...fontSize,
-											headerLineHeight: newValues,
-										},
-									})
-								}
-								placeholder={fontSize.headerLineHeight}
-								value={fontSize.headerLineHeight}
-							/>
+							<VStack>
+								<TextControl
+									__next40pxDefaultSize
+									__nextHasNoMarginBottom
+									label="Line Height"
+									onChange={(newValues) =>
+										setAttributes({
+											fontSize: {
+												...fontSize,
+												headerLineHeight: newValues,
+											},
+										})
+									}
+									placeholder="1.2 (default)"
+									value={fontSize.headerLineHeight}
+								/>
+								<Text variant="muted">
+									Enter a line-height value (unitless like 1.5 or with units
+									like 20px, 1rem, 1.2em).
+								</Text>
+							</VStack>
 
-							<TextControl
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
-								label="Letter Spacing"
-								onChange={(newValues) =>
-									setAttributes({
-										fontSize: {
-											...fontSize,
-											headerLetterSpacing: newValues,
-										},
-									})
-								}
-								placeholder={fontSize.headerLetterSpacing}
-								value={fontSize.headerLetterSpacing}
-							/>
+							<VStack>
+								<TextControl
+									__next40pxDefaultSize
+									__nextHasNoMarginBottom
+									label="Letter Spacing"
+									onChange={(newValues) =>
+										setAttributes({
+											fontSize: {
+												...fontSize,
+												headerLetterSpacing: newValues,
+											},
+										})
+									}
+									placeholder="normal (default)"
+									value={fontSize.headerLetterSpacing}
+								/>
+								<Text variant="muted">
+									Enter a value with units (e.g., 16px, 1rem, 1em).
+								</Text>
+							</VStack>
 						</VStack>
 
 						<VStack direction="column">
@@ -529,7 +564,7 @@ export default function Edit({ attributes, setAttributes }) {
 								withSlider
 							/>
 						</VStack>
-					</Flex>
+					</VStack>
 				</PanelBody>
 			</InspectorControls>
 

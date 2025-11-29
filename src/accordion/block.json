@@ -121,27 +121,6 @@
 	},
 	"supports": {
 		"html": false,
-		"border": {
-			"color": true,
-			"radius": true,
-			"width": true,
-			"style": true
-		},
-		"spacing": {
-			"padding": true,
-			"margin": true,
-			"units": ["px", "em", "rem", "vh", "vw"],
-			"__experimentalDefaultControls": {
-				"margin": true,
-				"padding": true
-			}
-		},
-		"__experimentalBorder": {
-			"color": true,
-			"radius": true,
-			"width": true,
-			"style": true
-		},
 		"inserter": true
 	},
 	"textdomain": "my-custom-blocks",

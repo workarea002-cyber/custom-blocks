@@ -150,11 +150,11 @@ export const customAccordionIconControl = [
 
 export const defaultAccordionIconControl = [
 	{
-		title: "Accordion Open",
+		title: "Open Icon",
 		attributeId: "openId",
 	},
 	{
-		title: "Accordion Close",
+		title: "Close Icon",
 		attributeId: "closeId",
 	},
 ];

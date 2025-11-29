@@ -49,29 +49,30 @@
 	}
 }
 
+.components-base-control {
+	margin-bottom: 0 !important;
+}
+
 // Side bar icons
-.accordion-icons {
-	.open-icon,
-	.close-icon {
-		button {
-			padding: 8px;
+.icons-selector {
+	button {
+		padding: 8px;
 
-			span {
-				width: 24px;
-				height: 24px;
+		.selected-icon {
+			width: 24px;
+			height: 24px;
 
-				svg {
-					> path {
-						fill: #000000;
-					}
-					> path[stroke] {
-						fill: none;
-						stroke: #000000;
-					}
-					> circle[stroke] {
-						fill: none;
-						stroke: #000000;
-					}
+			svg {
+				> path {
+					fill: #000000;
+				}
+				> path[stroke] {
+					fill: none;
+					stroke: #000000;
+				}
+				> circle[stroke] {
+					fill: none;
+					stroke: #000000;
 				}
 			}
 		}
@@ -80,4 +81,27 @@
 
 .components-popover__content {
 	padding: 16px;
+
+	.components-flex {
+		width: 305px;
+
+		.span-svg {
+			width: 24px;
+			height: 24px;
+
+			svg {
+				> path {
+					fill: #000000;
+				}
+				> path[stroke] {
+					fill: none;
+					stroke: #000000;
+				}
+				> circle[stroke] {
+					fill: none;
+					stroke: #000000;
+				}
+			}
+		}
+	}
 }
